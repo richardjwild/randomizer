@@ -38,7 +38,7 @@ public class IntegerRandomizerTest {
 
     @Test
     public void randomNegativeValue() {
-        int minValue = Integer.MIN_VALUE * -1;
+        int minValue = Integer.MIN_VALUE;
         int maxValue = -1;
         int value = Randomizer.forType(Integer.class).min(minValue).max(maxValue).value();
         assertTrue(minValue <= value);
