@@ -14,4 +14,6 @@ public abstract class Randomizer<T> {
     }
 
     public abstract T randomValue();
+
+    public abstract Randomizer<T> maximum(T maxValue);
 }
