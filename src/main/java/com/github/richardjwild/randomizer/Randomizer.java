@@ -18,4 +18,8 @@ public abstract class Randomizer<T> {
     public Randomizer<T> maximum(T maxValue) {
         throw new UnsupportedOperationException();
     }
+
+    public Randomizer<T> minimum(T minValue) {
+        throw new UnsupportedOperationException();
+    }
 }
