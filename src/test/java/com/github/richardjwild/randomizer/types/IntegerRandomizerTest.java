@@ -9,8 +9,8 @@ public class IntegerRandomizerTest {
 
     @Test
     public void randomValue() throws Exception {
-        int value = Randomizer.forType(Integer.class).randomValue();
-        System.out.println(value);
+        Integer value = Randomizer.forType(Integer.class).randomValue();
+        assertNotNull(value);
     }
 
     @Test

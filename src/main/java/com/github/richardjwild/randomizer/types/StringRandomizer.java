@@ -8,9 +8,4 @@ public class StringRandomizer extends Randomizer<String> {
     public String randomValue() {
         return null;
     }
-
-    @Override
-    public Randomizer<String> maximum(String maxValue) {
-        return null;
-    }
 }
