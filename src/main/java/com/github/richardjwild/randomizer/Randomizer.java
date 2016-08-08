@@ -10,7 +10,7 @@ public abstract class Randomizer<T> {
             return (Randomizer<T>) new StringRandomizer();
         else if (type == Integer.class)
             return (Randomizer<T>) new IntegerRandomizer();
-        return null;
+        throw new IllegalArgumentException();
     }
 
     public abstract T randomValue();

@@ -9,6 +9,11 @@ import static org.junit.Assert.assertSame;
 
 public class RandomizerTest {
 
+    @Test(expected = IllegalArgumentException.class)
+    public void throwIllegalArgumentExceptionWhenRandomizerRequestedForUnsupportedType() {
+        Randomizer.forType(Object.class);
+    }
+
     @Test
     public void getStringRandomizer() {
         Object actual = Randomizer.forType(String.class);
