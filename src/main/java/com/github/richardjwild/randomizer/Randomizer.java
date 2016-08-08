@@ -13,13 +13,13 @@ public abstract class Randomizer<T> {
         throw new IllegalArgumentException();
     }
 
-    public abstract T randomValue();
+    public abstract T value();
 
-    public Randomizer<T> maximum(T maxValue) {
+    public Randomizer<T> max(T maxValue) {
         throw new UnsupportedOperationException();
     }
 
-    public Randomizer<T> minimum(T minValue) {
+    public Randomizer<T> min(T minValue) {
         throw new UnsupportedOperationException();
     }
 }

@@ -11,18 +11,18 @@ public class IntegerRandomizer extends Randomizer<Integer> {
     private Integer minValue = 0;
 
     @Override
-    public Integer randomValue() {
+    public Integer value() {
         return random.nextInt(maxValue - minValue) + minValue;
     }
 
     @Override
-    public Randomizer<Integer> maximum(Integer maxValue) {
+    public Randomizer<Integer> max(Integer maxValue) {
         this.maxValue = maxValue;
         return this;
     }
 
     @Override
-    public Randomizer<Integer> minimum(Integer minValue) {
+    public Randomizer<Integer> min(Integer minValue) {
         this.minValue = minValue;
         return this;
     }
