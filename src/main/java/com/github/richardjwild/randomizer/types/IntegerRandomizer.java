@@ -2,11 +2,8 @@ package com.github.richardjwild.randomizer.types;
 
 import com.github.richardjwild.randomizer.Randomizer;
 
-import java.util.Random;
-
 public class IntegerRandomizer extends Randomizer<Integer> {
 
-    private final Random random = new Random();
     private Integer maxValue = Integer.MAX_VALUE;
     private Integer minValue = 0;
 
