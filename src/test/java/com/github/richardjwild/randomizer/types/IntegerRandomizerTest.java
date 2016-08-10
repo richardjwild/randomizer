@@ -44,4 +44,10 @@ public class IntegerRandomizerTest {
         assertTrue(minValue <= value);
         assertTrue(value <= maxValue);
     }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void lengthMethodNotSupportedForIntegerRandomizer() {
+        int anyLength = 0;
+        Randomizer.forType(Integer.class).length(anyLength);
+    }
 }

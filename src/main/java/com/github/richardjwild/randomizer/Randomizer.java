@@ -23,6 +23,6 @@ public abstract class Randomizer<T> {
     }
 
     public Randomizer<T> length(int length) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }
