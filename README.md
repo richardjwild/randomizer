@@ -67,4 +67,21 @@ public class Multiplier {
 }
 ```
 
-The tests will pass but this is clearly getting us nowhere.
+The tests will pass but this is clearly getting us nowhere. What about if my partner could not predict the input values?
+Enter the randomizer.
+
+```java
+@Test
+public void productOfTwoNumbers() {
+    int operandOne = Randomizer.forType(Integer.class).value();
+    int operandTwo = Randomizer.forType(Integer.class).value();
+    int actual = new Multiplier().multiply(operandOne, operandTwo);
+    int expected = operandOne * operandTwo;
+    Assert.assertEquals(expected, actual);
+}
+```
+
+Now they have no choice but to do a proper implementation! And this also helps ameliorate the first situation, because
+although my tests can still not cover the whole of the possible inputs, at least it will run with different values every
+time. If your implementation is susceptible to failure because of pathological inputs, this gives you a better chance
+over time of finding them.
