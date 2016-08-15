@@ -104,6 +104,20 @@ String random = Randomizer.forType(String.class).value();
 That's very likely. So you can do this:
 
 ```java
-int strlen = 10;
-String random = Randomizer.forType(String.class).length(strlen).value(); // gives a random string of 10 characters
+String random = Randomizer.forType(String.class).length(10).value(); // gives a random string of 10 characters
+```
+
+### What about maximum and minimum values?
+
+Naturally. This will give a random integer between 100 and 200 (inclusive):
+
+```java
+int random = Randomizer.forType(Integer.class).min(100).max(200).value();
+```
+
+The minimum and maximum values can both take positive and negative values, so both of these are valid:
+
+```java
+int random1 = Randomizer.forType(Integer.class).min(-100).max(100).value();
+int random2 = Randomizer.forType(Integer.class).min(-2000).max(-1000).value();
 ```
