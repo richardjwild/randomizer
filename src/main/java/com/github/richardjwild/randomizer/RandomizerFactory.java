@@ -2,6 +2,7 @@ package com.github.richardjwild.randomizer;
 
 import com.github.richardjwild.randomizer.types.DateRandomizer;
 import com.github.richardjwild.randomizer.types.IntegerRandomizer;
+import com.github.richardjwild.randomizer.types.LongRandomizer;
 import com.github.richardjwild.randomizer.types.StringRandomizer;
 
 import java.util.Date;
@@ -15,6 +16,8 @@ public class RandomizerFactory {
             return (Randomizer<T>) new DateRandomizer();
         else if (type == Integer.class)
             return (Randomizer<T>) new IntegerRandomizer();
-        throw new IllegalArgumentException();
+        else if ( type == Long.class)
+            return (Randomizer<T>) new LongRandomizer();
+            throw new IllegalArgumentException();
     }
 }
