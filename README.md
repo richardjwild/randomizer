@@ -134,3 +134,11 @@ Date randomDateInThePast = Randomizer.forType(Date.class).max(thePresent).value(
 ```
 
 Of course you can specify min _and_ max to generate a random date within a range.
+
+### I wish it supported <your type here>!
+
+Yeah, sorry, I only covered Strings, Dates and integers so far. But if you want it to support a different type, feel
+free to implement it yourself and raise a pull request. What you'll need to do is create a new subtype of
+`Randomizer` in `com.github.richardjwild.randomizer.types` and implement the `value` method (plus any of the other
+methods you want to support, such as `min`, `max` and `length`. Then just hook it into `RandomizerFactory` and you're
+good to go!
