@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 public class IntegerRandomizerTest {
 
     @Test
-    public void randomValue() throws Exception {
+    public void randomValue() {
         Integer value = Randomizer.forType(Integer.class).value();
         assertNotNull(value);
     }
