@@ -29,7 +29,8 @@ public class Multiplier {
     public int multiply(int arg1, int arg2) {
         return 2;
     }
-}```
+}
+```
 
 If your partner does that once, then fine. So you might write a second test to tease out some actual functionality:
 
@@ -63,6 +64,7 @@ public class Multiplier {
             return 12;
         return 2;
     }
+}
 ```
 
 The tests will pass but this is clearly getting us nowhere.
