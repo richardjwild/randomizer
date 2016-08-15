@@ -41,6 +41,12 @@ public class DateRandomizerTest {
         assertTrue(value.compareTo(maximum) <= 0);
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void lengthNotSupportedForDateRandomizer() {
+        int anyLength = 1;
+        Randomizer.forType(Date.class).length(anyLength);
+    }
+
     private Date currentTimePlusOffset(long offset) {
         Date date = new Date();
         date.setTime(date.getTime() + offset);
