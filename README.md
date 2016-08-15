@@ -142,3 +142,16 @@ free to implement it yourself and raise a pull request. What you'll need to do i
 `Randomizer` in `com.github.richardjwild.randomizer.types` and implement the `value` method (plus any of the other
 methods you want to support, such as `min`, `max` and `length`. Then just hook it into `RandomizerFactory` and you're
 good to go!
+
+## Backlog
+
+These are the things that are done and waiting to be done:
+
+- [x] Create the randomizer
+- [x] Implement for integers
+- [x] Add min and max feature
+- [x] Implement for Strings
+- [x] Add length feature
+- [x] Implement for Dates
+- [ ] Implement for other primitive types
+- [ ] Set up build script to deploy artifacts for Maven, Gradle, etc.
