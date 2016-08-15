@@ -90,3 +90,20 @@ Now they have no choice but to do a proper implementation! And this also helps a
 although my tests still cannot cover the whole of the possible inputs, at least it will run with different values every
 time. If your implementation is susceptible to failure because of pathological inputs, this gives you a better chance
 over time of finding them.
+
+### Cool. Does it work for strings too?
+
+Of course. You can probably already figure out how to do it:
+
+```java
+String random = Randomizer.forType(String.class).value();
+```
+
+### I might want to specify a particular length of string.
+
+That's very likely. So you can do this:
+
+```java
+int strlen = 10;
+String random = Randomizer.forType(String.class).length(strlen).value(); // gives a random string of 10 characters
+```
