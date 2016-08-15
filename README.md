@@ -121,3 +121,16 @@ The minimum and maximum values can both take positive and negative values, so bo
 int random1 = Randomizer.forType(Integer.class).min(-100).max(100).value();
 int random2 = Randomizer.forType(Integer.class).min(-2000).max(-1000).value();
 ```
+
+### Dates would be useful.
+
+I thought so too, so you can also request random dates, and specify minimum and maximum values:
+
+```java
+Date thePresent = new Date();
+Date anyRandomDate = Randomizer.forType(Date.class).value();
+Date randomDateInTheFuture = Randomizer.forType(Date.class).min(thePresent).value();
+Date randomDateInThePast = Randomizer.forType(Date.class).max(thePresent).value();
+```
+
+Of course you can specify min _and_ max to generate a random date within a range.
