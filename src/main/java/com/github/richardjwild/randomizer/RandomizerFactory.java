@@ -13,10 +13,12 @@ public class RandomizerFactory {
             return (Randomizer<T>) new DateRandomizer();
         else if (type == Integer.class)
             return (Randomizer<T>) new IntegerRandomizer();
-        else if ( type == Long.class)
+        else if (type == Long.class)
             return (Randomizer<T>) new LongRandomizer();
         else if (type == Double.class)
             return (Randomizer<T>) new DoubleRandomizer();
+        else if (type == Float.class)
+            return (Randomizer<T>) new FloatRandomizer();
         throw new IllegalArgumentException();
     }
 }
