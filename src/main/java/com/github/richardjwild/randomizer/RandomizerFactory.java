@@ -19,6 +19,8 @@ public class RandomizerFactory {
             return (Randomizer<T>) new DoubleRandomizer();
         else if (type == Float.class)
             return (Randomizer<T>) new FloatRandomizer();
+        else if (type == Character.class)
+            return (Randomizer<T>) new CharacterRandomizer();
         throw new IllegalArgumentException();
     }
 }
