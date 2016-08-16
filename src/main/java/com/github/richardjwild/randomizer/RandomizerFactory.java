@@ -1,9 +1,6 @@
 package com.github.richardjwild.randomizer;
 
-import com.github.richardjwild.randomizer.types.DateRandomizer;
-import com.github.richardjwild.randomizer.types.IntegerRandomizer;
-import com.github.richardjwild.randomizer.types.LongRandomizer;
-import com.github.richardjwild.randomizer.types.StringRandomizer;
+import com.github.richardjwild.randomizer.types.*;
 
 import java.util.Date;
 
@@ -18,6 +15,8 @@ public class RandomizerFactory {
             return (Randomizer<T>) new IntegerRandomizer();
         else if ( type == Long.class)
             return (Randomizer<T>) new LongRandomizer();
-            throw new IllegalArgumentException();
+        else if (type == Double.class)
+            return (Randomizer<T>) new DoubleRandomizer();
+        throw new IllegalArgumentException();
     }
 }
