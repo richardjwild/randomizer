@@ -1,28 +1,36 @@
 package com.github.richardjwild.randomizer;
 
+import com.github.richardjwild.randomizer.exception.NoRandomizerFoundException;
+import com.github.richardjwild.randomizer.exception.ShouldNeverHappenException;
 import com.github.richardjwild.randomizer.types.*;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-public class RandomizerFactory {
+class RandomizerFactory {
 
-    public <T> Randomizer<T> randomizerFor(Class<T> type) {
-        if (type == String.class)
-            return (Randomizer<T>) new StringRandomizer();
-        else if (type == Date.class)
-            return (Randomizer<T>) new DateRandomizer();
-        else if (type == Integer.class)
-            return (Randomizer<T>) new IntegerRandomizer();
-        else if (type == Long.class)
-            return (Randomizer<T>) new LongRandomizer();
-        else if (type == Double.class)
-            return (Randomizer<T>) new DoubleRandomizer();
-        else if (type == Float.class)
-            return (Randomizer<T>) new FloatRandomizer();
-        else if (type == Character.class)
-            return (Randomizer<T>) new CharacterRandomizer();
-        else if (type == Boolean.class)
-            return (Randomizer<T>) new BooleanRandomizer();
-        throw new IllegalArgumentException();
+    private Map<Class<?>, Class<? extends Randomizer>> randomizers = new HashMap<>();
+
+    RandomizerFactory() {
+        randomizers.put(String.class, StringRandomizer.class);
+        randomizers.put(Date.class, DateRandomizer.class);
+        randomizers.put(Integer.class, IntegerRandomizer.class);
+        randomizers.put(Long.class, LongRandomizer.class);
+        randomizers.put(Double.class, DoubleRandomizer.class);
+        randomizers.put(Float.class, FloatRandomizer.class);
+        randomizers.put(Character.class, CharacterRandomizer.class);
+        randomizers.put(Boolean.class, BooleanRandomizer.class);
+    }
+
+    <T> Randomizer<T> randomizerFor(Class<T> type) {
+        if (randomizers.containsKey(type)) {
+            try {
+                return (Randomizer<T>) randomizers.get(type).newInstance();
+            } catch (InstantiationException | IllegalAccessException e) {
+                throw new ShouldNeverHappenException(e);
+            }
+        }
+        throw new NoRandomizerFoundException(type.getName());
     }
 }
