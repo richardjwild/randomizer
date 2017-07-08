@@ -137,11 +137,11 @@ Of course you can specify min _and_ max to generate a random date within a range
 
 ### I wish it supported \<your type here\>!
 
-Yeah, sorry, I only covered Strings, Dates and primitives so far. But if you want it to support a different type, feel
+Yeah, sorry, I only covered primitives, Strings, Dates and BigDecimals so far. But if you want it to support a different type, feel
 free to implement it yourself and raise a pull request. What you'll need to do is create a new subtype of
 `Randomizer` in `com.github.richardjwild.randomizer.types` and implement the `value` method (plus any of the other
 methods you want to support, such as `min`, `max` and `length`. Then just hook it into `RandomizerFactory` and you're
-good to go!
+good to go. Better still if you raise a pull request.
 
 ## Backlog
 
@@ -154,5 +154,5 @@ These are the things that are done and waiting to be done:
 - [x] Add length feature
 - [x] Implement for Dates
 - [x] Implement for other primitive types
-- [ ] Implement for BigDecimal
+- [x] Implement for BigDecimal
 - [ ] Set up build script to deploy artifacts for Maven, Gradle, etc.

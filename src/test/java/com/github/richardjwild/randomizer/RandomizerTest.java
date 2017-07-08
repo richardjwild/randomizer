@@ -13,8 +13,13 @@ import static org.junit.Assert.assertSame;
 public class RandomizerTest {
 
     @Test(expected = NoRandomizerFoundException.class)
-    public void throwIllegalArgumentExceptionWhenRandomizerRequestedForUnsupportedType() {
+    public void throwNoRandomizerFoundExceptionWhenRandomizerRequestedForUnsupportedType() {
         Randomizer.forType(Object.class);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void throwIllegalArgumentExceptionWhenRandomizerRequestedForNull() {
+        Randomizer.forType(null);
     }
 
     @Test
