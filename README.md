@@ -155,4 +155,4 @@ These are the things that are done and waiting to be done:
 - [x] Implement for Dates
 - [x] Implement for other primitive types
 - [x] Implement for BigDecimal
-- [ ] Set up build script to deploy artifacts for Maven, Gradle, etc.
+- [x] Set up build script to deploy artifacts for Maven, Gradle, etc.
