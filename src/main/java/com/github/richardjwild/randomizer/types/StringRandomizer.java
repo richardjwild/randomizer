@@ -16,7 +16,7 @@ public class StringRandomizer extends Randomizer<String> {
     @Override
     public String value() {
         if (length == null || length <= 0)
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Length must be specified for random String");
         return randomString();
     }
 

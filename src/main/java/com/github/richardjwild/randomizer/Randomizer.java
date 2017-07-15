@@ -63,7 +63,7 @@ public abstract class Randomizer<T> {
     }
 
     /**
-     * Sets the required length for the generated random value.
+     * Sets the required length for the generated random value. This is only applicable to String, for which it is mandatory.
      * @param length The required length for the generated random value.
      * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
      * @throws UnsupportedOperationException The randomizer for the requested type does not support length.
@@ -73,7 +73,7 @@ public abstract class Randomizer<T> {
     }
 
     /**
-     * Sets the required scale for the generated random value.
+     * Sets the required scale for the generated random value. This is only applicable to BigDecimal.
      * @param scale The required scale for the generated random value.
      * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
      * @throws UnsupportedOperationException The randomizer for the requested type does not support scale.
