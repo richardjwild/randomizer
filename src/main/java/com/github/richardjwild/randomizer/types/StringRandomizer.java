@@ -2,60 +2,60 @@ package com.github.richardjwild.randomizer.types;
 
 import com.github.richardjwild.randomizer.Randomizer;
 
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
+import static java.util.Optional.ofNullable;
 
 public class StringRandomizer extends Randomizer<String> {
 
-    private static Charset charset = Charset.forName("UTF-8");
-
     private Integer length = null;
+    private Integer maxLength = null;
+    private final int maxChar = (int) Character.MAX_VALUE;
+    private final int minChar = (int) ' ';
 
     @Override
     public String value() {
-        if (length == null || length <= 0)
-            throw new IllegalArgumentException("Length must be specified for random String");
+        validateConstraints();
         return randomString();
     }
 
+    private void validateConstraints() {
+        if (length == null && maxLength == null)
+            throw new IllegalArgumentException("Either length or maxLength must be specified");
+        if (length != null && maxLength != null)
+            throw new IllegalArgumentException("Length and maxLength may not be specified simultaneously");
+        if (maxLength != null && maxLength <= 0)
+            throw new IllegalArgumentException("Maximum length must be greater than zero");
+        if (length != null && length <= 0)
+            throw new IllegalArgumentException("Length must be greater than zero");
+    }
+
     private String randomString() {
-        byte[] bytes = randomBytes();
-        clearTopBits(bytes);
-        excludeNonPrintingCharacters(bytes);
-        return decodeUtf8String(bytes);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < getLength(); i++)
+            sb.append(randomCharacter());
+        return sb.toString();
     }
 
-    private byte[] randomBytes() {
-        byte[] bytes = new byte[length];
-        random.nextBytes(bytes);
-        return bytes;
+    private int getLength() {
+        return ofNullable(length).orElseGet(() -> randomInt(1, maxLength));
     }
 
-    private void clearTopBits(byte[] bytes) {
-        for (int i=0; i<bytes.length; i++)
-            bytes[i] &= 0x7f;
+    private char randomCharacter() {
+        return (char) randomInt(minChar, maxChar);
     }
 
-    private void excludeNonPrintingCharacters(byte[] bytes) {
-        for (int i=0; i<bytes.length; i++)
-            if (bytes[i] < 32)
-                bytes[i] += 32;
-    }
-
-    private String decodeUtf8String(byte[] bytes) {
-        CharBuffer charBuffer = CharBuffer.allocate(length);
-        CharsetDecoder decoder = charset.newDecoder();
-        decoder.decode(ByteBuffer.wrap(bytes), charBuffer, true);
-        decoder.flush(charBuffer);
-        charBuffer.flip();
-        return charBuffer.toString();
+    private int randomInt(int min, int max) {
+        return random.nextInt(max - min) + min;
     }
 
     @Override
     public Randomizer<String> length(int length) {
         this.length = length;
+        return this;
+    }
+
+    @Override
+    public Randomizer<String> maxLength(int maxLength) {
+        this.maxLength = maxLength;
         return this;
     }
 }

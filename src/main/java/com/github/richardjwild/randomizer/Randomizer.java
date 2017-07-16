@@ -63,12 +63,24 @@ public abstract class Randomizer<T> {
     }
 
     /**
-     * Sets the required length for the generated random value. This is only applicable to String, for which it is mandatory.
+     * Sets the required length for the generated random value. This is only applicable to String, for which it is mandatory
+     * unless <code>maxLength</code> is specified instead. It is not allowed to specify both length and maxLength.
      * @param length The required length for the generated random value.
      * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
      * @throws UnsupportedOperationException The randomizer for the requested type does not support length.
      */
     public Randomizer<T> length(int length) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Sets the maximum length for the generated random value. This is only applicable to String, for which it is mandatory
+     * unless <code>length</code> is specified instead. It is not allowed to specify both maxLength and length.
+     * @param maxLength The maximum length for the generated random value.
+     * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
+     * @throws UnsupportedOperationException The randomizer for the requested type does not support length.
+     */
+    public Randomizer<T> maxLength(int maxLength) {
         throw new UnsupportedOperationException();
     }
 
