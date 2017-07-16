@@ -12,9 +12,9 @@ import static java.util.Optional.*;
 
 class RandomizerFactory {
 
-    private Map<Class<?>, Class<? extends Randomizer>> randomizerClasses = new HashMap<>();
+    private static final Map<Class<?>, Class<? extends Randomizer>> RANDOMIZER_CLASSES = new HashMap<>();
 
-    RandomizerFactory() {
+    static {
         add(String.class, StringRandomizer.class);
         add(Date.class, DateRandomizer.class);
         add(Integer.class, IntegerRandomizer.class);
@@ -26,12 +26,12 @@ class RandomizerFactory {
         add(BigDecimal.class, BigDecimalRandomizer.class);
     }
 
-    private void add(Class<?> type, Class<? extends Randomizer> randomizerClassForType) {
-        randomizerClasses.put(type, randomizerClassForType);
+    private static void add(Class<?> type, Class<? extends Randomizer> randomizerClassForType) {
+        RANDOMIZER_CLASSES.put(type, randomizerClassForType);
     }
 
     <T> Randomizer<T> create(Class<T> type) {
-        return ofNullable(randomizerClasses.get(type))
+        return ofNullable(RANDOMIZER_CLASSES.get(type))
                 .map(c -> (Randomizer<T>) instanceOf(c))
                 .orElseThrow(() -> new NoRandomizerFoundException(type.getName()));
     }
