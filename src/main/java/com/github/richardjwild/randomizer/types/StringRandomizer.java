@@ -9,8 +9,8 @@ public class StringRandomizer extends Randomizer<String> {
     private Integer length = null;
     private Integer maxLength = null;
     private Integer minLength = null;
-    private final int maxChar = (int) Character.MAX_VALUE;
-    private final int minChar = (int) ' ';
+    private int maxChar = (int) Character.MAX_VALUE;
+    private int minChar = (int) ' ';
 
     /** {@inheritDoc} */
     @Override
@@ -32,6 +32,8 @@ public class StringRandomizer extends Randomizer<String> {
             throw new IllegalArgumentException("Length must be greater than zero");
         if (minLength != null && maxLength != null && minLength > maxLength)
             throw new IllegalArgumentException("Minimum length must be less than or equal to maximum length");
+        if (minChar > maxChar)
+            throw new IllegalArgumentException("Minimum character must be less than or equal to maximum character");
     }
 
     private String randomString() {
@@ -50,7 +52,7 @@ public class StringRandomizer extends Randomizer<String> {
     }
 
     private int randomInt(int min, int max) {
-        return random.nextInt(max - min) + min;
+        return random.nextInt(max - (min - 1)) + min;
     }
 
     /** {@inheritDoc} */
@@ -71,6 +73,20 @@ public class StringRandomizer extends Randomizer<String> {
     @Override
     public StringRandomizer minLength(int minLength) {
         this.minLength = minLength;
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public StringRandomizer minChar(char minChar) {
+        this.minChar = minChar;
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public StringRandomizer maxChar(char maxChar) {
+        this.maxChar = maxChar;
         return this;
     }
 }

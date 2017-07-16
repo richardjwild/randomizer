@@ -62,6 +62,11 @@ public class StringRandomizerTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void getValueWithMinCharGreaterThanMaxCharThrowsException() {
+        Randomizer.forType(String.class).minChar('b').maxChar('a').value();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void lengthAndMaximumLengthMayNotBeSpecifiedAtTheSameTime() {
         Randomizer.forType(String.class).length(1).maxLength(1).value();
     }
@@ -94,5 +99,16 @@ public class StringRandomizerTest {
         String value = Randomizer.forType(String.class).minLength(minLength).maxLength(maxLength).value();
         assertTrue(minLength <= value.length());
         assertTrue(value.length() <= maxLength);
+    }
+
+    @Test
+    public void getValueWithMinCharAndMaxCharSpecified() {
+        char minChar = 'a';
+        char maxChar = 'z';
+        String value = Randomizer.forType(String.class).minChar(minChar).maxChar(maxChar).length(100).value();
+        for (char c: value.toCharArray()) {
+            assertTrue(minChar <= c);
+            assertTrue(c <= maxChar);
+        }
     }
 }

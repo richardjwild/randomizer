@@ -2,8 +2,9 @@ package com.github.richardjwild.randomizer;
 
 import com.github.richardjwild.randomizer.exception.NoRandomizerFoundException;
 
-import java.util.Optional;
 import java.util.Random;
+
+import static java.util.Optional.ofNullable;
 
 /**
  * Creates randomized values suitable for use as test data in automated tests.<p>
@@ -27,7 +28,7 @@ public abstract class Randomizer<T> {
      * @throws NoRandomizerFoundException No randomizer is implemented for the requested type.
      */
     public static <T> Randomizer<T> forType(Class<T> type) {
-        return Optional.ofNullable(type)
+        return ofNullable(type)
                 .map(randomizerFactory::create)
                 .orElseThrow(() -> new IllegalArgumentException("Type cannot be null"));
     }
@@ -63,7 +64,7 @@ public abstract class Randomizer<T> {
     }
 
     /**
-     * Sets the required length for the generated random value. This is only applicable to String, for which it is
+     * Sets the required length for the generated random value. This is only applicable to type String, for which it is
      * mandatory unless <code>maxLength</code> is specified instead. It is not allowed to specify both length and
      * maxLength at the same time.
      * @param length The required length for the generated random value.
@@ -75,7 +76,7 @@ public abstract class Randomizer<T> {
     }
 
     /**
-     * Sets the maximum length for the generated random value. This is only applicable to String, for which it is
+     * Sets the maximum length for the generated random value. This is only applicable to type String, for which it is
      * mandatory unless <code>length</code> is specified instead. It is not permitted to specify both maxLength and
      * length at the same time.
      * @param maxLength The maximum length for the generated random value.
@@ -87,8 +88,8 @@ public abstract class Randomizer<T> {
     }
 
     /**
-     * Sets the minimum length for the generated random value. This is only applicable to String. It is not permitted to
-     * specify both minLength and length at the same time.
+     * Sets the minimum length for the generated random value. This is only applicable to type String. It is not
+     * permitted to specify both minLength and length at the same time.
      * @param minLength The maximum length for the generated random value.
      * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
      * @throws UnsupportedOperationException The randomizer for the requested type does not support length.
@@ -98,12 +99,32 @@ public abstract class Randomizer<T> {
     }
 
     /**
-     * Sets the required scale for the generated random value. This is only applicable to BigDecimal.
+     * Sets the required scale for the generated random value. This is only applicable to type BigDecimal.
      * @param scale The required scale for the generated random value.
      * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
      * @throws UnsupportedOperationException The randomizer for the requested type does not support scale.
      */
     public Randomizer<T> scale(int scale) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Sets the minimum value for every character in the generated random value. This is only applicable to type String.
+     * @param minChar The minimum character value that will appear in the generated string.
+     * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
+     * @throws UnsupportedOperationException The randomizer for the requested type does not support minChar.
+     */
+    public Randomizer<T> minChar(char minChar) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Sets the maximum value for every character in the generated random value. This is only applicable to type String.
+     * @param maxChar The maximum character value that will appear in the generated string.
+     * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
+     * @throws UnsupportedOperationException The randomizer for the requested type does not support maxChar.
+     */
+    public Randomizer<T> maxChar(char maxChar) {
         throw new UnsupportedOperationException();
     }
 }

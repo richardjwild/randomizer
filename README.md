@@ -1,10 +1,10 @@
 # It creates random values for use in automated tests!
 
-Imagine you're pair programming and practicing TDD with someone who follows the rule _do the simplest thing
-possible to make the tests pass_ a little too literally. It might be okay to make the very first test pass by
-returning a literal, but if you make the next test pass the same way then you're not making progress.
-However, if your partner could not predict the input data they would be forced to evolve the code to make it
-more general, and this is what you want. Enter the randomizer.
+Imagine you're pair programming and practicing TDD with someone who follows the rule _do the simplest thing possible to
+make the tests pass_ a little too literally. It might be okay to make the very first test pass by returning a literal,
+but if you make the next test pass the same way then you're not making progress. However, if your partner could not
+predict the input data they would be forced to evolve the code to make it more general, and this is what you want. Enter
+the randomizer.
 
 To add it to your project, these are the Maven details:
  
@@ -12,7 +12,7 @@ To add it to your project, these are the Maven details:
 <dependency>
     <groupId>com.github.richardjwild</groupId>
     <artifactId>randomizer</artifactId>
-    <version>0.1.1</version>
+    <version>0.2.0</version>
 </dependency>
 ``` 
 
@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    testCompile 'com.github.richardjwild:randomizer:0.1.1'
+    testCompile 'com.github.richardjwild:randomizer:0.2.0'
 }
 ```
 
@@ -78,8 +78,24 @@ You can specify both min _and_ max to generate a random date within a range.
 
 ### What types are supported?
 
-All the primitives, Strings, Dates and BigDecimals so far. If you want it to support a different type, feel
-free to implement it yourself and raise a pull request. What you'll need to do is create a new subtype of
-`Randomizer` in `com.github.richardjwild.randomizer.types` and implement the `value` method (plus any of the other
-methods you want to support, such as `min`, `max` and `length`. Then just hook it into `RandomizerFactory` and you're
-good to go.
+All the primitives, Strings, Dates and BigDecimals so far. This table shows the constraint specifiers that are valid for
+each type:
+
+| Type       | min | max | length | maxLength | minLength | maxChar | minChar | scale |
+| ---------- | --- | --- | ------ | --------- | --------- | ------- | ------- | ----- |
+| Integer    | yes | yes | no     | no        | no        | no      | no      | no    |
+| Long       | yes | yes | no     | no        | no        | no      | no      | no    |
+| Float      | yes | yes | no     | no        | no        | no      | no      | no    |
+| Double     | yes | yes | no     | no        | no        | no      | no      | no    |
+| Character  | yes | yes | no     | no        | no        | no      | no      | no    |
+| Boolean    | no  | no  | no     | no        | no        | no      | no      | no    |
+| Date       | yes | yes | no     | no        | no        | no      | no      | no    |
+| String     | no  | no  | yes    | yes       | yes       | yes     | yes     | no    |
+| BigDecimal | yes | yes | no     | no        | no        | no      | no      | yes   |
+
+### I want it to support another type. How can I implement this?
+
+If you want the randomizer to support a different type, please feel free to implement it yourself and raise a pull
+request. What you'll need to do is create a new subtype of `Randomizer` in `com.github.richardjwild.randomizer.types`
+and implement the `value` method (plus any of the other methods you want to support, such as `min`, `max` and `length`.
+Then just hook it into `RandomizerFactory` and you're good to go.
