@@ -8,10 +8,10 @@ import java.util.Random;
 /**
  * Creates randomized values suitable for use as test data in automated tests.<p>
  * Usage: <code>&lt;Type&gt; randomValue = Randomizer.forType(&lt;Type&gt;.class).value();</code><p>
- * The class implements the builder pattern to allow boundaries (constraints) to be specified on the generated random value. These
- * constraints are: <code>max</code>, <code>min</code>, <code>length</code> and <code>scale</code>. Not all constraints are
- * applicable to all supported types: if a constraint method is called for a type that it does not apply to, an
- * <code>UnsupportedOperationException</code> will be thrown.
+ * The class implements the builder pattern to allow boundaries (constraints) to be specified on the generated random
+ * value. These constraints are: <code>max</code>, <code>min</code>, <code>length</code> and <code>scale</code>. Not all
+ * constraints are applicable to all supported types: if a constraint method is called for a type that it does not apply
+ * to, an <code>UnsupportedOperationException</code> will be thrown.
  * @param <T> The type of randomized value to be generated.
  */
 public abstract class Randomizer<T> {
@@ -63,8 +63,9 @@ public abstract class Randomizer<T> {
     }
 
     /**
-     * Sets the required length for the generated random value. This is only applicable to String, for which it is mandatory
-     * unless <code>maxLength</code> is specified instead. It is not allowed to specify both length and maxLength.
+     * Sets the required length for the generated random value. This is only applicable to String, for which it is
+     * mandatory unless <code>maxLength</code> is specified instead. It is not allowed to specify both length and
+     * maxLength at the same time.
      * @param length The required length for the generated random value.
      * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
      * @throws UnsupportedOperationException The randomizer for the requested type does not support length.
@@ -74,13 +75,25 @@ public abstract class Randomizer<T> {
     }
 
     /**
-     * Sets the maximum length for the generated random value. This is only applicable to String, for which it is mandatory
-     * unless <code>length</code> is specified instead. It is not allowed to specify both maxLength and length.
+     * Sets the maximum length for the generated random value. This is only applicable to String, for which it is
+     * mandatory unless <code>length</code> is specified instead. It is not permitted to specify both maxLength and
+     * length at the same time.
      * @param maxLength The maximum length for the generated random value.
      * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
      * @throws UnsupportedOperationException The randomizer for the requested type does not support length.
      */
     public Randomizer<T> maxLength(int maxLength) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Sets the minimum length for the generated random value. This is only applicable to String. It is not permitted to
+     * specify both minLength and length at the same time.
+     * @param minLength The maximum length for the generated random value.
+     * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
+     * @throws UnsupportedOperationException The randomizer for the requested type does not support length.
+     */
+    public Randomizer<T> minLength(int minLength) {
         throw new UnsupportedOperationException();
     }
 

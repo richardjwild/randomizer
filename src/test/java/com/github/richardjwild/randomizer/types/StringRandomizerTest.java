@@ -47,8 +47,28 @@ public class StringRandomizerTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void getValueWithMinLengthZeroThrowsException() {
+        Randomizer.forType(String.class).minLength(0).value();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getValueWithMinLengthNegativeThrowsException() {
+        Randomizer.forType(String.class).minLength(-1).value();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getValueWithMinLengthGreaterThanMaxLengthThrowsException() {
+        Randomizer.forType(String.class).minLength(2).maxLength(1).value();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void lengthAndMaximumLengthMayNotBeSpecifiedAtTheSameTime() {
         Randomizer.forType(String.class).length(1).maxLength(1).value();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void lengthAndMinimumLengthMayNotBeSpecifiedAtTheSameTime() {
+        Randomizer.forType(String.class).length(1).minLength(1).value();
     }
 
     @Test
@@ -64,6 +84,15 @@ public class StringRandomizerTest {
     public void getValueWithMaxLengthSpecified() {
         int maxLength = 100;
         String value = Randomizer.forType(String.class).maxLength(maxLength).value();
+        assertTrue(value.length() <= maxLength);
+    }
+
+    @Test
+    public void getValueWithMaxAndMinLengthSpecified() {
+        int maxLength = 100;
+        int minLength = 90;
+        String value = Randomizer.forType(String.class).minLength(minLength).maxLength(maxLength).value();
+        assertTrue(minLength <= value.length());
         assertTrue(value.length() <= maxLength);
     }
 }
