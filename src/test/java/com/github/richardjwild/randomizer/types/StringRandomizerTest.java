@@ -79,10 +79,9 @@ public class StringRandomizerTest {
     @Test
     public void getValueWithLengthSpecified() {
         int length = 100;
-        Object value = Randomizer.forType(String.class).length(length).value();
+        String value = Randomizer.forType(String.class).length(length).value();
         assertNotNull(value);
-        assertTrue(value instanceof String);
-        assertEquals(length, value.toString().length());
+        assertEquals(length, value.length());
     }
 
     @Test

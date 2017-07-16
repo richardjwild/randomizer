@@ -10,9 +10,10 @@ import static java.util.Optional.ofNullable;
  * Creates randomized values suitable for use as test data in automated tests.<p>
  * Usage: <code>&lt;Type&gt; randomValue = Randomizer.forType(&lt;Type&gt;.class).value();</code><p>
  * The class implements the builder pattern to allow boundaries (constraints) to be specified on the generated random
- * value. These constraints are: <code>max</code>, <code>min</code>, <code>length</code> and <code>scale</code>. Not all
- * constraints are applicable to all supported types: if a constraint method is called for a type that it does not apply
- * to, an <code>UnsupportedOperationException</code> will be thrown.
+ * value. These constraints are: <code>max</code>, <code>min</code>, <code>length</code>, <code>minLength</code>,
+ * <code>maxLength</code>, <code>minChar</code>, <code>maxChar</code> and <code>scale</code>. Not all constraints are
+ * applicable to all supported types: if a constraint method is called for a type it is not applicable to, an
+ * <code>UnsupportedOperationException</code> will be thrown.
  * @param <T> The type of randomized value to be generated.
  */
 public abstract class Randomizer<T> {
