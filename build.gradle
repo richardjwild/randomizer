@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    testCompile 'junit:junit:4.4'
+    testCompile 'junit:junit:4.12'
 }
 
 task javadocJar(type: Jar) {

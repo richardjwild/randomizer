@@ -1,7 +1,9 @@
 package com.github.richardjwild.randomizer.types;
 
 import com.github.richardjwild.randomizer.Randomizer;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.Date;
 
@@ -11,6 +13,9 @@ import static org.junit.Assert.assertTrue;
 public class DateRandomizerTest {
 
     private static final long ONE_DAY = 1000 * 60 * 60 * 24;
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void randomDate() {
@@ -41,9 +46,10 @@ public class DateRandomizerTest {
         assertTrue(value.compareTo(maximum) <= 0);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void lengthNotSupportedForDateRandomizer() {
         int anyLength = 1;
+        thrown.expect(UnsupportedOperationException.class);
         Randomizer.forType(Date.class).length(anyLength);
     }
 

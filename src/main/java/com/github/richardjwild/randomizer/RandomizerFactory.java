@@ -1,6 +1,6 @@
 package com.github.richardjwild.randomizer;
 
-import com.github.richardjwild.randomizer.exception.NoRandomizerFoundException;
+import com.github.richardjwild.randomizer.validation.NoRandomizerFoundException;
 import com.github.richardjwild.randomizer.types.*;
 
 import java.math.BigDecimal;

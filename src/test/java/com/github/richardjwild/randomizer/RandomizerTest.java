@@ -1,10 +1,14 @@
 package com.github.richardjwild.randomizer;
 
-import com.github.richardjwild.randomizer.exception.NoRandomizerFoundException;
+import com.github.richardjwild.randomizer.validation.NoRandomizerFoundException;
 import com.github.richardjwild.randomizer.types.*;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.Date;
+import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -12,24 +16,26 @@ import static org.junit.Assert.assertSame;
 
 public class RandomizerTest {
 
-    @Test(expected = NoRandomizerFoundException.class)
-    public void throwNoRandomizerFoundExceptionWhenRandomizerRequestedForUnsupportedType() {
-        Randomizer.forType(Object.class);
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    @Before
+    public void setUp() {
+        Locale.setDefault(Locale.ENGLISH);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void throwIllegalArgumentExceptionWhenRandomizerRequestedForNull() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Type cannot be null");
         Randomizer.forType(null);
     }
 
     @Test
-    public void exceptionHasCorrectMessageWhenRandomizerRequestedForUnsupportedType() {
-        try {
-            Randomizer.forType(Object.class);
-        } catch (NoRandomizerFoundException actual) {
-            String expected = String.format("No randomizer found for class: java.lang.Object");
-            assertEquals(expected, actual.getMessage());
-        }
+    public void throwNoRandomizerFoundExceptionWhenRandomizerRequestedForUnsupportedType() {
+        thrown.expect(NoRandomizerFoundException.class);
+        thrown.expectMessage("No randomizer found for class: java.lang.Object");
+        Randomizer.forType(Object.class);
     }
 
     @Test

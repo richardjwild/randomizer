@@ -1,13 +1,21 @@
 package com.github.richardjwild.randomizer.types;
 
 import com.github.richardjwild.randomizer.Randomizer;
+import com.github.richardjwild.randomizer.streams.Characters;
+import com.github.richardjwild.randomizer.types.pattern.StringPatternElement;
+import com.github.richardjwild.randomizer.types.pattern.StringPatternParser;
 
+import java.util.List;
+
+import static com.github.richardjwild.randomizer.validation.Validator.check;
+import static java.util.Collections.singletonList;
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Creates randomized String values suitable for use as test data in automated tests.<p>
  * Usage: <code>String randomValue = Randomizer.forType(String.class).length(&lt;length&gt;).value();</code><p>
- * This class implements the builder pattern to allow boundaries (constraints) to be specified on the generated random
+ * This class implements the builder patternElements to allow boundaries (constraints) to be specified on the generated random
  * value. These constraints are: {@link #length}, {@link #maxLength}, {@link #minLength}, {@link #maxChar} and
  * {@link #minChar}. If any other constraint method is called on this
  * class an <code>UnsupportedOperationException</code> will be thrown.<p>
@@ -27,6 +35,7 @@ public class StringRandomizer extends Randomizer<String> {
     private Integer minLength = null;
     private int maxChar = (int) Character.MAX_VALUE;
     private int minChar = (int) ' ';
+    private String pattern;
 
     @Override
     public String value() {
@@ -35,39 +44,63 @@ public class StringRandomizer extends Randomizer<String> {
     }
 
     private void validateConstraints() {
-        if (length == null && maxLength == null)
-            throw new IllegalArgumentException("Either length or maxLength must be specified");
-        if (length != null && maxLength != null)
-            throw new IllegalArgumentException("Length and maxLength may not be specified simultaneously");
-        if (length != null && minLength != null)
-            throw new IllegalArgumentException("Length and minLength may not be specified simultaneously");
-        if (maxLength != null && maxLength <= 0)
-            throw new IllegalArgumentException("Maximum length must be greater than zero");
-        if (length != null && length <= 0)
-            throw new IllegalArgumentException("Length must be greater than zero");
-        if (minLength != null && maxLength != null && minLength > maxLength)
-            throw new IllegalArgumentException("Minimum length must be less than or equal to maximum length");
-        if (minChar > maxChar)
-            throw new IllegalArgumentException("Minimum character must be less than or equal to maximum character");
+        check(() -> pattern == null && length == null && maxLength == null,
+                "randomizer.string.validation.lengthmaxlengthorpattern");
+        check(() -> length != null && maxLength != null,
+                "randomizer.string.validation.lengthandmaxlength");
+        check(() -> length != null && minLength != null,
+                "randomizer.string.validation.lengthandminlength");
+        check(() -> maxLength != null && maxLength <= 0,
+                "randomizer.string.validation.maxlengthgreaterzero");
+        check(() -> minLength != null && minLength <= 0,
+                "randomizer.string.validation.minlengthgreaterzero");
+        check(() -> length != null && length <= 0,
+                "randomizer.string.validation.lengthgreaterzero");
+        check(() -> minLength != null && maxLength != null && minLength > maxLength,
+                "randomizer.string.validation.minlengthlessthanmaxlength");
+        check(() -> minChar > maxChar,
+                "randomizer.string.validation.mincharlessthanmaxchar");
     }
 
     private String randomString() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < getLength(); i++)
-            sb.append(randomCharacter());
+        final StringBuilder sb = new StringBuilder();
+        patternElements().forEach(pe -> buildAndAppendStringElement(sb, pe));
         return sb.toString();
     }
 
-    private int getLength() {
-        return ofNullable(length).orElseGet(() -> randomInt(ofNullable(minLength).orElse(1), maxLength));
+    private List<StringPatternElement> patternElements() {
+        return ofNullable(pattern)
+                .map(StringPatternParser::new)
+                .map(StringPatternParser::parseAndCreatePatternElements)
+                .orElseGet(this::createSinglePatternElement);
     }
 
-    private char randomCharacter() {
-        return (char) randomInt(minChar, maxChar);
+    private List<StringPatternElement> createSinglePatternElement() {
+        return singletonList(new StringPatternElement(length, minLength, maxLength, allCharactersBetween(minChar, maxChar)));
+    }
+
+    private List<Character> allCharactersBetween(int minChar, int maxChar) {
+        return Characters.from((char) minChar).limit(maxChar - minChar).collect(toList());
+    }
+
+    private void buildAndAppendStringElement(StringBuilder sb, StringPatternElement pe) {
+        int length = elementLength(pe);
+        for (int c = 0; c < length; c++)
+            sb.append(randomCharacterFrom(pe.permissibleCharacters()));
+    }
+
+    private int elementLength(StringPatternElement pe) {
+        return ofNullable(pe.length())
+                .orElseGet(() -> randomInt(ofNullable(pe.minLength()).orElse(1), pe.maxLength()));
+    }
+
+    private char randomCharacterFrom(List<Character> permissibleCharacters) {
+        int r = randomInt(1, permissibleCharacters.size() + 1);
+        return permissibleCharacters.get(r - 1);
     }
 
     private int randomInt(int min, int max) {
-        return random.nextInt(max - (min - 1)) + min;
+        return random.nextInt(max - min) + min;
     }
 
     @Override
@@ -97,6 +130,12 @@ public class StringRandomizer extends Randomizer<String> {
     @Override
     public StringRandomizer maxChar(char maxChar) {
         this.maxChar = maxChar;
+        return this;
+    }
+
+    @Override
+    public StringRandomizer pattern(String pattern) {
+        this.pattern = pattern;
         return this;
     }
 }

@@ -1,19 +1,23 @@
 package com.github.richardjwild.randomizer.types;
 
 import com.github.richardjwild.randomizer.Randomizer;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class DoubleRandomizerTest {
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @Test
     public void randomValue() {
         Double actual = Randomizer.forType(Double.class).value();
         assertNotNull(actual);
     }
-
 
     @Test
     public void randomValueMaximumOneHundred() {
@@ -47,9 +51,10 @@ public class DoubleRandomizerTest {
         assertTrue(value <= maxValue);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void lengthMethodNotSupportedForDoubleRandomizer() {
         int anyLength = 0;
+        thrown.expect(UnsupportedOperationException.class);
         Randomizer.forType(Double.class).length(anyLength);
     }
 }

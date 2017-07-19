@@ -1,9 +1,11 @@
 package com.github.richardjwild.randomizer;
 
-import com.github.richardjwild.randomizer.exception.NoRandomizerFoundException;
+import com.github.richardjwild.randomizer.localization.Messages;
+import com.github.richardjwild.randomizer.validation.NoRandomizerFoundException;
 
 import java.util.Random;
 
+import static com.github.richardjwild.randomizer.localization.Messages.getMessage;
 import static java.util.Optional.ofNullable;
 
 /**
@@ -31,7 +33,7 @@ public abstract class Randomizer<T> {
     public static <T> Randomizer<T> forType(Class<T> type) {
         return ofNullable(type)
                 .map(randomizerFactory::create)
-                .orElseThrow(() -> new IllegalArgumentException("Type cannot be null"));
+                .orElseThrow(() -> new IllegalArgumentException(getMessage("randomizer.type.null")));
     }
 
     protected final Random random = new Random();
@@ -126,6 +128,10 @@ public abstract class Randomizer<T> {
      * @throws UnsupportedOperationException The randomizer for the requested type does not support maxChar.
      */
     public Randomizer<T> maxChar(char maxChar) {
+        throw new UnsupportedOperationException();
+    }
+
+    public Randomizer<T> pattern(String pattern) {
         throw new UnsupportedOperationException();
     }
 }

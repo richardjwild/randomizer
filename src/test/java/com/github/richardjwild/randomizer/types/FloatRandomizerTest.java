@@ -1,12 +1,17 @@
 package com.github.richardjwild.randomizer.types;
 
 import com.github.richardjwild.randomizer.Randomizer;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class FloatRandomizerTest {
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void randomValue() {
@@ -46,9 +51,10 @@ public class FloatRandomizerTest {
         assertTrue(value <= maxValue);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void lengthMethodNotSupportedForFloatRandomizer() {
         int anyLength = 0;
+        thrown.expect(UnsupportedOperationException.class);
         Randomizer.forType(Float.class).length(anyLength);
     }
 }
