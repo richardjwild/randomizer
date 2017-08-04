@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.github.richardjwild.randomizer.localization.Messages.getMessage;
+import static com.github.richardjwild.randomizer.localization.Messages.*;
 import static com.github.richardjwild.randomizer.streams.Characters.from;
 
 public class DefineCharacterRangeState extends ParserState {
@@ -24,7 +24,7 @@ public class DefineCharacterRangeState extends ParserState {
         ParserState nextState = this;
         switch (c) {
             case '\\':
-                char nextChar = parser.lookAhead(1, "pattern.parser.endedunexpectedly.wantedcharacter");
+                char nextChar = parser.lookAhead(1, UNEXPECTED_PATTERN_END_WANTED_CHARACTER);
                 parser.skip(1);
                 addPermittedCharacterOrDefineRange(nextChar);
                 break;
@@ -38,7 +38,7 @@ public class DefineCharacterRangeState extends ParserState {
     }
 
     private void addPermittedCharacterOrDefineRange(char nextChar) {
-        if ('-' == parser.lookAhead(1, "pattern.parser.endedunexpectedly.wantedcharacterdashclosesquarebrace"))
+        if ('-' == parser.lookAhead(1, UNEXPECTED_PATTERN_END_WANTED_CHARACTER_DASH_CLOSESQUAREBRACE))
             addRangeOfPermittedCharacters(nextChar);
         else
             permittedCharacters.add(nextChar);
@@ -51,8 +51,8 @@ public class DefineCharacterRangeState extends ParserState {
     }
 
     private void checkNextCharacterIsCorrectForLengthDefinition() {
-        if ('{' != parser.lookAhead(1, "pattern.parser.endedunexpectedly.wantedopencurlybrace"))
-            throw new StringPatternParserException(getMessage("pattern.parser.unexpectedcharacter.wantedopencurlybrace"));
+        if ('{' != parser.lookAhead(1, UNEXPECTED_PATTERN_END_WANTED_OPENCURLYBRACE))
+            throw new StringPatternParserException(getMessage(UNEXPECTED_CHARACTER_WANTED_OPENCURLYBRACE));
     }
 
     private void addRangeOfPermittedCharacters(char minChar) {
@@ -61,10 +61,10 @@ public class DefineCharacterRangeState extends ParserState {
     }
 
     private char getMaxChar() {
-        char maxChar = parser.lookAhead(2, "pattern.parser.endedunexpectedly.wantedcharacter");
+        char maxChar = parser.lookAhead(2, UNEXPECTED_PATTERN_END_WANTED_CHARACTER);
         parser.skip(2);
         if (maxChar == '\\') {
-            maxChar = parser.lookAhead(1, "pattern.parser.endedunexpectedly.wantedcharacter");
+            maxChar = parser.lookAhead(1, UNEXPECTED_PATTERN_END_WANTED_CHARACTER);
             parser.skip(1);
         }
         return maxChar;
@@ -78,6 +78,6 @@ public class DefineCharacterRangeState extends ParserState {
 
     @Override
     public void patternEnded() {
-        throw new StringPatternParserException(getMessage("pattern.parser.endedunexpectedly.wantedclosesquarebrace"));
+        throw new StringPatternParserException(getMessage(UNEXPECTED_PATTERN_END_WANTED_CLOSESQUAREBRACE));
     }
 }

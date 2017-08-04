@@ -6,7 +6,7 @@ import com.github.richardjwild.randomizer.types.pattern.StringPatternParserExcep
 
 import java.util.List;
 
-import static com.github.richardjwild.randomizer.localization.Messages.getMessage;
+import static com.github.richardjwild.randomizer.localization.Messages.*;
 import static java.lang.Integer.parseInt;
 
 public class DefineRangeLengthState extends ParserState {
@@ -34,8 +34,8 @@ public class DefineRangeLengthState extends ParserState {
     @Override
     public void patternEnded() {
         if (lengthBuilder.length() == 0)
-            throw new StringPatternParserException(getMessage("pattern.parser.endedunexpectedly.wantednumber"));
-        throw new StringPatternParserException(getMessage("pattern.parser.endedunexpectedly.wantednumbercommaclosecurlybrace"));
+            throw new StringPatternParserException(getMessage(UNEXPECTED_PATTERN_END_WANTED_NUMBER));
+        throw new StringPatternParserException(getMessage(UNEXPECTED_PATTERN_END_WANTED_NUMBER_COMMA_CLOSECURLYBRACE));
     }
 
     private void setElementLength(String elementLengthDefinition) {
@@ -43,14 +43,14 @@ public class DefineRangeLengthState extends ParserState {
         switch (parts.length) {
             case 1:
                 if (elementLengthDefinition.endsWith(","))
-                    throw new StringPatternParserException(getMessage("pattern.parser.lengthrange.missingvalue"));
+                    throw new StringPatternParserException(getMessage(MISSING_VALUE_IN_LENGTH_DEFINITION));
                 builder.addFixedLengthElement(tryParseInt(parts[0]), permittedCharacters);
                 break;
             case 2:
                 builder.addRandomLengthElement(tryParseInt(parts[0]), tryParseInt(parts[1]), permittedCharacters);
                 break;
             default:
-                throw new StringPatternParserException(getMessage("pattern.parser.lengthrange.toomanyfields",
+                throw new StringPatternParserException(getMessage(TOO_MANY_FIELDS_IN_LENGTH_DEFINITION,
                         Integer.valueOf(parts.length).toString()));
         }
     }
@@ -58,10 +58,10 @@ public class DefineRangeLengthState extends ParserState {
     private int tryParseInt(String s) {
         try {
             if (s.isEmpty())
-                throw new StringPatternParserException(getMessage("pattern.parser.lengthrange.missingvalue"));
+                throw new StringPatternParserException(getMessage(MISSING_VALUE_IN_LENGTH_DEFINITION));
             return parseInt(s);
         } catch (NumberFormatException e) {
-            throw new StringPatternParserException(getMessage("pattern.parser.lengthrange.notanumber"));
+            throw new StringPatternParserException(getMessage(INVALID_NUMBER_IN_LENGTH_DEFINITION));
         }
     }
 }

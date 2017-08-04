@@ -3,6 +3,8 @@ package com.github.richardjwild.randomizer.types.pattern.parserstate;
 import com.github.richardjwild.randomizer.types.pattern.StringPatternBuilder;
 import com.github.richardjwild.randomizer.types.pattern.StringPatternParser;
 
+import static com.github.richardjwild.randomizer.localization.Messages.UNEXPECTED_PATTERN_END_WANTED_CHARACTER;
+
 public class DefineLiteralPatternState extends ParserState {
 
     public DefineLiteralPatternState(StringPatternParser parser, StringPatternBuilder builder) {
@@ -14,7 +16,7 @@ public class DefineLiteralPatternState extends ParserState {
         ParserState nextState = this;
         switch (c) {
             case '\\':
-                char next = parser.lookAhead(1, "pattern.parser.endedunexpectedly.wantedcharacter");
+                char next = parser.lookAhead(1, UNEXPECTED_PATTERN_END_WANTED_CHARACTER);
                 builder.addSingleCharacterElement(next);
                 parser.skip(1);
                 break;

@@ -4,6 +4,7 @@ import com.github.richardjwild.randomizer.validation.NoRandomizerFoundException;
 
 import java.util.Random;
 
+import static com.github.richardjwild.randomizer.localization.Messages.TYPE_CANNOT_BE_NULL;
 import static com.github.richardjwild.randomizer.localization.Messages.getMessage;
 import static java.util.Optional.ofNullable;
 
@@ -32,7 +33,7 @@ public abstract class Randomizer<T> {
     public static <T> Randomizer<T> forType(Class<T> type) {
         return ofNullable(type)
                 .map(randomizerFactory::create)
-                .orElseThrow(() -> new IllegalArgumentException(getMessage("randomizer.type.null")));
+                .orElseThrow(() -> new IllegalArgumentException(getMessage(TYPE_CANNOT_BE_NULL)));
     }
 
     protected final Random random = new Random();
