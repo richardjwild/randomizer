@@ -26,21 +26,22 @@ public class DefineCharacterRangeState extends ParserState {
             case '\\':
                 char nextChar = parser.lookAhead(1, "pattern.parser.endedunexpectedly.wantedcharacter");
                 parser.skip(1);
-                if ('-' == parser.lookAhead(1, "pattern.parser.endedunexpectedly.wantedcharacterdashclosesquarebrace"))
-                    addRangeOfPermittedCharacters(nextChar);
-                else
-                    permittedCharacters.add(nextChar);
+                addPermittedCharacterOrDefineRange(nextChar);
                 break;
             case ']':
                 nextState = moveToDefineRangeLengthState();
                 break;
             default:
-                if ('-' == parser.lookAhead(1, "pattern.parser.endedunexpectedly.wantedcharacterdashclosesquarebrace"))
-                    addRangeOfPermittedCharacters(c);
-                else
-                    permittedCharacters.add(c);
+                addPermittedCharacterOrDefineRange(c);
         }
         return nextState;
+    }
+
+    private void addPermittedCharacterOrDefineRange(char nextChar) {
+        if ('-' == parser.lookAhead(1, "pattern.parser.endedunexpectedly.wantedcharacterdashclosesquarebrace"))
+            addRangeOfPermittedCharacters(nextChar);
+        else
+            permittedCharacters.add(nextChar);
     }
 
     private ParserState moveToDefineRangeLengthState() {
