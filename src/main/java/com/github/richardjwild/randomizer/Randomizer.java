@@ -1,6 +1,5 @@
 package com.github.richardjwild.randomizer;
 
-import com.github.richardjwild.randomizer.localization.Messages;
 import com.github.richardjwild.randomizer.validation.NoRandomizerFoundException;
 
 import java.util.Random;
@@ -131,6 +130,25 @@ public abstract class Randomizer<T> {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Defines the pattern that the generated random value will follow. This is only applicable to type String. The
+     * pattern syntax is a subset of the regular expression syntax. Example usages:<p>
+     * <code>[a-z]{1}</code> will produce a single random character from a to z.<p>
+     * <code>[a-z0-9]{2}</code> will produce two random characters from a to z or 0 to 9.<p>
+     * <code>[AEIOU]{5}</code> will produce five random uppercase vowels.<p>
+     * <code>[a-zA-Z]{1,10}</code> will produce between 1 and 10 random alphabetic characters. The length will be
+     * chosen randomly.<p>
+     * <code>abc</code> will produce the literal string "abc".<p>
+     * <code>\[\]</code> will produce the literal string "[]", i.e. backslash causes the next character to be treated as
+     * a literal character.
+     * <code>[\[\]]{10}</code> will produce a string of length 10 randomly constructed from [ and ] characters.<p>
+     * <code>[a\-c]{10}</code> will produce a string of length 10 randomly constructed from a, - and c characters.<p>
+     * <code>[a-zA-Z]{5,10}[0-9]{2}@[a-z]{5,10}.com</code> will produce a string consisting of 5-10 random alpha
+     * characters followed by 2 random digits, then an '@' symbol, then 5-10 random random lowercase letters, followed
+     * by the literal string ".com". In other words, a random string that resembles an email address.
+     * @param pattern
+     * @return
+     */
     public Randomizer<T> pattern(String pattern) {
         throw new UnsupportedOperationException();
     }

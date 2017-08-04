@@ -3,6 +3,7 @@ package com.github.richardjwild.randomizer.types;
 import com.github.richardjwild.randomizer.Randomizer;
 import com.github.richardjwild.randomizer.types.pattern.StringPatternParserException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -211,6 +212,13 @@ public class StringRandomizerTest {
     }
 
     @Test
+    public void patternWithRangeUnexpectedlyTerminatedAfterEscapedCharacter() {
+        thrown.expect(StringPatternParserException.class);
+        thrown.expectMessage("Unexpected end of pattern input, was expecting: ']', '-', a character");
+        testObj.pattern("[\\[").value();
+    }
+
+    @Test
     public void patternWithRangeWithoutLengthSpecified1() {
         thrown.expect(StringPatternParserException.class);
         thrown.expectMessage("Unexpected end of pattern input, was expecting: '{'");
@@ -327,6 +335,13 @@ public class StringRandomizerTest {
     }
 
     @Test
+    public void patternWithEscapedCharactersInSetOfPermittedCharacters() {
+        String result = testObj.pattern("[\\[\\]]{10}").value();
+        for (char c: result.toCharArray())
+            assertTrue(c == '[' || c == ']');
+    }
+
+    @Test
     public void patternWithEscapedCharacterInRangeDefinition1() {
         String value = testObj.pattern("[a\\-]{10}").value();
         for (char c : value.toCharArray())
@@ -363,5 +378,19 @@ public class StringRandomizerTest {
         thrown.expect(StringPatternParserException.class);
         thrown.expectMessage("Unexpected end of pattern input, was expecting: a character");
         testObj.pattern("[a-\\").value();
+    }
+
+    @Ignore("Run this test to see the effect of various patterns")
+    @Test
+    public void variousPatterns() {
+        System.out.println(testObj.pattern("[a-z]{1}").value());
+        System.out.println(testObj.pattern("[a-z0-9]{2}").value());
+        System.out.println(testObj.pattern("[AEIOU]{50}").value());
+        System.out.println(testObj.pattern("[a-zA-Z]{1,10}").value());
+        System.out.println(testObj.pattern("This is a literal string").value());
+        System.out.println(testObj.pattern("\\[This is a literal string with escaped characters\\]").value());
+        System.out.println(testObj.pattern("[\\[\\]\\-]{10}").value());
+        System.out.println(testObj.pattern("[a\\-c]{10}").value());
+        System.out.println(testObj.pattern("[a-zA-Z]{5,10}[0-9]{2}@[a-z]{5,10}.com").value());
     }
 }

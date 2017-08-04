@@ -25,7 +25,11 @@ public class DefineCharacterRangeState extends ParserState {
         switch (c) {
             case '\\':
                 char nextChar = parser.lookAhead(1, "pattern.parser.endedunexpectedly.wantedcharacter");
-                permittedCharacters.add(nextChar);
+                parser.skip(1);
+                if ('-' == parser.lookAhead(1, "pattern.parser.endedunexpectedly.wantedcharacterdashclosesquarebrace"))
+                    addRangeOfPermittedCharacters(nextChar);
+                else
+                    permittedCharacters.add(nextChar);
                 break;
             case ']':
                 nextState = moveToDefineRangeLengthState();
