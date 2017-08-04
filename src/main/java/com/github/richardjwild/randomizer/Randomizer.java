@@ -147,8 +147,9 @@ public abstract class Randomizer<T> {
      * <code>[a-zA-Z]{5,10}[0-9]{2}@[a-z]{5,10}.com</code> will produce a string consisting of 5-10 random alpha
      * characters followed by 2 random digits, then an '@' symbol, then 5-10 random random lowercase letters, followed
      * by the literal string ".com". In other words, a random string that resembles an email address.
-     * @param pattern
-     * @return
+     * @param pattern The pattern for the randomized string to adhere to
+     * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
+     * @throws UnsupportedOperationException The randomizer for the requested type does not support pattern.
      */
     public Randomizer<T> pattern(String pattern) {
         throw new UnsupportedOperationException();
