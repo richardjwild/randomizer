@@ -207,6 +207,14 @@ public class StringRandomizerTest {
     }
 
     @Test
+    public void patternWithRangeOfPermittedCharactersWrongWayRound() {
+        String value = testObj.pattern("[c-a]{1}").value();
+        assertEquals(1, value.length());
+        assertTrue('a' <= value.charAt(0));
+        assertTrue(value.charAt(0) <= 'c');
+    }
+
+    @Test
     public void patternWithRangeWithLengthGreaterThanOne() {
         String value = testObj.pattern("[a-c]{3}").value();
         assertEquals(3, value.length());
@@ -214,48 +222,6 @@ public class StringRandomizerTest {
             assertTrue('a' <= c);
             assertTrue(c <= 'c');
         }
-    }
-
-    @Test
-    public void patternWithRangeUnexpectedlyTerminated1() {
-        thrown.expect(StringPatternParserException.class);
-        thrown.expectMessage("Unexpected end of pattern input, was expecting: ']', '-', a character");
-        testObj.pattern("[a").value();
-    }
-
-    @Test
-    public void patternWithRangeUnexpectedlyTerminated2() {
-        thrown.expect(StringPatternParserException.class);
-        thrown.expectMessage("Unexpected end of pattern input, was expecting: a character");
-        testObj.pattern("[a-").value();
-    }
-
-    @Test
-    public void patternWithRangeUnexpectedlyTerminated3() {
-        thrown.expect(StringPatternParserException.class);
-        thrown.expectMessage("Unexpected end of pattern input, was expecting: ']'");
-        testObj.pattern("[a-b").value();
-    }
-
-    @Test
-    public void patternWithRangeUnexpectedlyTerminatedAfterEscapedCharacter() {
-        thrown.expect(StringPatternParserException.class);
-        thrown.expectMessage("Unexpected end of pattern input, was expecting: ']', '-', a character");
-        testObj.pattern("[\\[").value();
-    }
-
-    @Test
-    public void patternWithRangeWithoutLengthSpecified1() {
-        thrown.expect(StringPatternParserException.class);
-        thrown.expectMessage("Unexpected end of pattern input, was expecting: '{'");
-        testObj.pattern("[a-c]").value();
-    }
-
-    @Test
-    public void patternWithRangeWithoutLengthSpecified2() {
-        thrown.expect(StringPatternParserException.class);
-        thrown.expectMessage("Unexpected character after range definition, was expecting: '{'");
-        testObj.pattern("[a]a").value();
     }
 
     @Test
@@ -284,80 +250,116 @@ public class StringRandomizerTest {
         }
     }
 
+    private void checkPatternParsing(String pattern, String expectedErrorMessage) {
+        thrown.expect(StringPatternParserException.class);
+        thrown.expectMessage(expectedErrorMessage);
+        testObj.pattern(pattern).value();
+    }
+
+    @Test
+    public void patternWithRangeUnexpectedlyTerminated1() {
+        checkPatternParsing("[a",
+                "Unexpected end of pattern input, was expecting: ']', '-', a character");
+    }
+
+    @Test
+    public void patternWithRangeUnexpectedlyTerminated2() {
+        checkPatternParsing("[a-",
+                "Unexpected end of pattern input, was expecting: a character");
+    }
+
+    @Test
+    public void patternWithRangeUnexpectedlyTerminated3() {
+        checkPatternParsing("[a-b","Unexpected end of pattern input, was expecting: ']'");
+    }
+
+    @Test
+    public void patternWithRangeUnexpectedlyTerminatedAfterEscapedCharacter() {
+        checkPatternParsing("[\\[",
+                "Unexpected end of pattern input, was expecting: ']', '-', a character");
+    }
+
+    @Test
+    public void patternWithRangeWithoutLengthSpecified1() {
+        checkPatternParsing("[a-c]","Unexpected end of pattern input, was expecting: '{'");
+    }
+
+    @Test
+    public void patternWithRangeWithoutLengthSpecified2() {
+        checkPatternParsing("[a]a",
+                "Unexpected character after range definition, was expecting: '{'");
+    }
+
     @Test
     public void patternWithTooManyFieldsInLengthRange() {
-        thrown.expect(StringPatternParserException.class);
-        thrown.expectMessage("Too many fields in pattern length definition, was expecting: 2 but got: 3");
-        testObj.pattern("[a-c]{1,1,1}").value();
+        checkPatternParsing("[a-c]{1,1,1}",
+                "Too many fields in pattern length definition, was expecting: 2 but got: 3");
     }
 
     @Test
-    public void patternWithNanInLengthRange1() {
-        patternWithNanInLengthRange("[a]{a}");
+    public void patternWithNanInLengthRange() {
+        checkPatternParsing("[a]{a}", "Not-a-number in pattern length definition");
     }
 
     @Test
-    public void patternWithNanInLengthRange2() {
-        patternWithNanInLengthRange("[a]{a,1}");
+    public void patternWithNanInLengthRangeLowerLimit() {
+        checkPatternParsing("[a]{a,1}", "Not-a-number in pattern length definition");
     }
 
     @Test
-    public void patternWithNanInLengthRange3() {
-        patternWithNanInLengthRange("[a]{1,a}");
-    }
-
-    private void patternWithNanInLengthRange(String pattern) {
-        thrown.expect(StringPatternParserException.class);
-        thrown.expectMessage("Not-a-number in pattern length definition");
-        testObj.pattern(pattern).value();
+    public void patternWithNanInLengthRangeUpperLimit() {
+        checkPatternParsing("[a]{1,a}", "Not-a-number in pattern length definition");
     }
 
     @Test
-    public void patternWithMissingValueInLengthRange1() {
-        patternWithMissingValueInLengthRange("[a]{}");
+    public void patternWithMissingLimitsInLengthRange() {
+        checkPatternParsing("[a]{}", "Missing value in pattern length definition");
     }
 
     @Test
-    public void patternWithMissingValueInLengthRange2() {
-        patternWithMissingValueInLengthRange("[a]{,1}");
+    public void patternWithMissingLowerLimitInLengthRange() {
+        checkPatternParsing("[a]{,1}", "Missing value in pattern length definition");
     }
 
     @Test
-    public void patternWithMissingValueInLengthRange3() {
-        patternWithMissingValueInLengthRange("[a]{1,}");
-    }
-
-    private void patternWithMissingValueInLengthRange(String pattern) {
-        thrown.expect(StringPatternParserException.class);
-        thrown.expectMessage("Missing value in pattern length definition");
-        testObj.pattern(pattern).value();
+    public void patternWithMissingUpperLimitInLengthRange3() {
+        checkPatternParsing("[a]{1,}", "Missing value in pattern length definition");
     }
 
     @Test
     public void patternWithUnexpectedTerminationOfLengthRange1() {
-        thrown.expect(StringPatternParserException.class);
-        thrown.expectMessage("Unexpected end of pattern input, was expecting: a number");
-        testObj.pattern("[a]{").value();
+        checkPatternParsing("[a]{",
+                "Unexpected end of pattern input, was expecting: a number");
     }
 
     @Test
     public void patternWithUnexpectedTerminationOfLengthRange2() {
-        thrown.expect(StringPatternParserException.class);
-        thrown.expectMessage("Unexpected end of pattern input, was expecting: ',' '}', a number");
-        testObj.pattern("[a]{1").value();
+        checkPatternParsing("[a]{1",
+                "Unexpected end of pattern input, was expecting: ',' '}', a number");
+    }
+
+    @Test
+    public void patternWithUnexpectedTerminationOfLengthRange3() {
+        checkPatternParsing("[\\",
+                "Unexpected end of pattern input, was expecting: a character");
+    }
+
+    @Test
+    public void patternWithUnexpectedTerminationOfLengthRange4() {
+        checkPatternParsing("[a-\\",
+                "Unexpected end of pattern input, was expecting: a character");
+    }
+
+    @Test
+    public void patternWithEscapeCharacterInLiteralSequenceAtEndOfPattern() {
+        checkPatternParsing("\\",
+                "Unexpected end of pattern input, was expecting: a character");
     }
 
     @Test
     public void patternWithEscapedCharacterInLiteralSequence() {
         String value = testObj.pattern("\\[").value();
         assertEquals("[", value);
-    }
-
-    @Test
-    public void patternWithEscapeCharacterInLiteralSequenceAtEndOfPattern() {
-        thrown.expect(StringPatternParserException.class);
-        thrown.expectMessage("Unexpected end of pattern input, was expecting: a character");
-        testObj.pattern("\\").value();
     }
 
     @Test
@@ -392,31 +394,21 @@ public class StringRandomizerTest {
         }
     }
 
-    @Test
-    public void patternWithRangeDefinitionThatEndsUnexpectedlyAfterEscapeCharacter1() {
-        thrown.expect(StringPatternParserException.class);
-        thrown.expectMessage("Unexpected end of pattern input, was expecting: a character");
-        testObj.pattern("[\\").value();
-    }
-
-    @Test
-    public void patternWithRangeDefinitionThatEndsUnexpectedlyAfterEscapeCharacter2() {
-        thrown.expect(StringPatternParserException.class);
-        thrown.expectMessage("Unexpected end of pattern input, was expecting: a character");
-        testObj.pattern("[a-\\").value();
-    }
-
     @Ignore("Run this test to see the effect of various patterns")
     @Test
     public void variousPatterns() {
-        System.out.println(testObj.pattern("[a-z]{1}").value());
-        System.out.println(testObj.pattern("[a-z0-9]{2}").value());
-        System.out.println(testObj.pattern("[AEIOU]{50}").value());
-        System.out.println(testObj.pattern("[a-zA-Z]{1,10}").value());
-        System.out.println(testObj.pattern("This is a literal string").value());
-        System.out.println(testObj.pattern("\\[This is a literal string with escaped characters\\]").value());
-        System.out.println(testObj.pattern("[\\[\\]\\-]{10}").value());
-        System.out.println(testObj.pattern("[a\\-c]{10}").value());
-        System.out.println(testObj.pattern("[a-zA-Z]{5,10}[0-9]{2}@[a-z]{5,10}.com").value());
+        print(() -> testObj.pattern("[a-z]{1}").value(),"Single random character");
+        print(() -> testObj.pattern("[a-z0-9]{2}").value(), "Two random alphanumeric characters");
+        print(() -> testObj.pattern("[AEIOU]{50}").value(), "Fifty random uppercase vowels");
+        print(() -> testObj.pattern("[a-zA-Z]{1,10}").value(), "Between one and ten random letters");
+        print(() -> testObj.pattern("Hello world!").value(), "A literal string");
+        print(() -> testObj.pattern("\\[Hello world!\\]").value(),"Another literal string");
+        print(() -> testObj.pattern("[\\[\\]\\-]{10}").value(), "Random special characters");
+        print(() -> testObj.pattern("[a\\-c]{10}").value(), "Random string including special characters");
+        print(() -> testObj.pattern("[a-zA-Z]{5,10}[0-9]{2}@[a-z]{5,10}.com").value(), "Random email address");
+    }
+
+    private void print(Supplier<String> randomizer, String message) {
+        System.out.println(message + ": " + randomizer.get());
     }
 }

@@ -21,15 +21,16 @@ import static java.util.stream.Collectors.toList;
  * random value. These constraints are: {@link #length}, {@link #maxLength}, {@link #minLength}, {@link #maxChar},
  * {@link #minChar} and {@link #pattern}. If any other constraint method is called on this class an
  * <code>UnsupportedOperationException</code> will be thrown.<p>
- * If <code>pattern</code> is specified
- * Either one of <code>length</code> and <code>maxLength</code> must be specified, but it is illegal to specify both at
- * the same time. You may optionally specify a minimum length with <code>minLength</code> in conjunction with
- * <code>maxLength</code> but it is illegal to specify a minimum length in conjunction with <code>length</code>. If a
- * minimum length is specified, it must be less than or equal to the maximum length.<p>
- * You may optionally constrain the randomly generated characters that comprise the string with {@link #minChar} and
- * {@link #maxChar}. The defaults are <code>' '</code> (space) and {@link Character#MAX_VALUE} respectively. For
- * example, <code>Randomizer.forType(String.class).length(3).minChar('a').maxChar('a').value()</code> will always
- * return the string <code>aaa</code>.
+ * If <code>pattern</code> is specified then no other constraint may be specified. If <code>pattern</code> is not
+ * specified then either one of <code>length</code> and <code>maxLength</code> must be specified, but it is illegal to
+ * specify both <code>length</code> and <code>maxLength</code> at the same time. You may optionally specify a minimum
+ * length with <code>minLength</code> in conjunction with <code>maxLength</code> but it is illegal to specify a minimum
+ * length in conjunction with <code>length</code>. If a minimum length is specified, it must be less than or equal to
+ * the maximum length.<p>
+ * In the absence of a pattern, you may optionally constrain the randomly generated characters that comprise the string
+ * with {@link #minChar} and {@link #maxChar}. The defaults are <code>' '</code> (space) and {@link Character#MAX_VALUE}
+ * respectively. For example, <code>Randomizer.forType(String.class).length(3).minChar('a').maxChar('a').value()</code>
+ * will always return the string <code>aaa</code>.
  */
 public class StringRandomizer extends Randomizer<String> {
 
@@ -100,8 +101,7 @@ public class StringRandomizer extends Randomizer<String> {
     }
 
     private int elementLength(StringPatternElement pe) {
-        return pe.length()
-                .orElseGet(() -> randomLength(pe));
+        return pe.length().orElseGet(() -> randomLength(pe));
     }
 
     private int randomLength(StringPatternElement pe) {
