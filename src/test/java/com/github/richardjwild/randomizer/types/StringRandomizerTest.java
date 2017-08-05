@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.Locale;
+import java.util.function.Supplier;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -40,81 +41,106 @@ public class StringRandomizerTest {
         testObj.min(minValue).value();
     }
 
+    private void checkValidation(Supplier<String> testSupplier, String expectedErrorMessage) {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage(expectedErrorMessage);
+        testSupplier.get();
+    }
+
     @Test
     public void getValueWithoutSpecifyingLengthOrMaxLengthThrowsException() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("One of length, maxLength or a pattern must be specified");
-        testObj.value();
+        checkValidation(() -> testObj.value(),
+                "One of length, maxLength or a pattern must be specified");
     }
 
     @Test
     public void getValueWithLengthZeroThrowsException() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Length must be greater than zero");
-        testObj.length(0).value();
+        checkValidation(() -> testObj.length(0).value(),
+                "Length must be greater than zero");
     }
 
     @Test
     public void getValueWithLengthNegativeThrowsException() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Length must be greater than zero");
-        testObj.length(-1).value();
+        checkValidation(() -> testObj.length(-1).value(),
+                "Length must be greater than zero");
     }
 
     @Test
     public void getValueWithMaxLengthZeroThrowsException() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Maximum length must be greater than zero");
-        testObj.maxLength(0).value();
+        checkValidation(() -> testObj.maxLength(0).value(),
+                "Maximum length must be greater than zero");
     }
 
     @Test
     public void getValueWithMaxLengthNegativeThrowsException() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Maximum length must be greater than zero");
-        testObj.maxLength(-1).value();
+        checkValidation(() -> testObj.maxLength(-1).value(),
+                "Maximum length must be greater than zero");
     }
 
     @Test
     public void getValueWithMinLengthZeroThrowsException() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Minimum length must be greater than zero");
-        testObj.maxLength(1).minLength(0).value();
+        checkValidation(() -> testObj.maxLength(1).minLength(0).value(),
+                "Minimum length must be greater than zero");
     }
 
     @Test
     public void getValueWithMinLengthNegativeThrowsException() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Minimum length must be greater than zero");
-        testObj.maxLength(1).minLength(-1).value();
+        checkValidation(() -> testObj.maxLength(1).minLength(-1).value(),
+                "Minimum length must be greater than zero");
     }
 
     @Test
     public void getValueWithMinLengthGreaterThanMaxLengthThrowsException() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Minimum length must be less than or equal to maximum length");
-        testObj.minLength(2).maxLength(1).value();
+        checkValidation(() -> testObj.minLength(2).maxLength(1).value(),
+                "Minimum length must be less than or equal to maximum length");
     }
 
     @Test
     public void getValueWithMinCharGreaterThanMaxCharThrowsException() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Minimum character must be less than or equal to maximum character");
-        testObj.length(1).minChar('b').maxChar('a').value();
+        checkValidation(() -> testObj.length(1).minChar('b').maxChar('a').value(),
+                "Minimum character must be less than or equal to maximum character");
     }
 
     @Test
     public void lengthAndMaximumLengthMayNotBeSpecifiedAtTheSameTime() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Length and maxLength may not be specified simultaneously");
-        testObj.length(1).maxLength(1).value();
+        checkValidation(() -> testObj.length(1).maxLength(1).value(),
+                "Length and maxLength may not be specified simultaneously");
     }
 
     @Test
     public void lengthAndMinimumLengthMayNotBeSpecifiedAtTheSameTime() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Length and minLength may not be specified simultaneously");
-        testObj.length(1).minLength(1).value();
+        checkValidation(() -> testObj.length(1).minLength(1).value(),
+                "Length and minLength may not be specified simultaneously");
+    }
+
+    @Test
+    public void patternAndMinimumLengthMayNotBeSpecifiedAtTheSameTime() {
+        checkValidation(() -> testObj.minLength(1).pattern("a").value(),
+                "Pattern may not be specified simultaneously with any other constraint");
+    }
+
+    @Test
+    public void patternAndMaximumLengthMayNotBeSpecifiedAtTheSameTime() {
+        checkValidation(() -> testObj.maxLength(1).pattern("a").value(),
+                "Pattern may not be specified simultaneously with any other constraint");
+    }
+
+    @Test
+    public void patternAndLengthMayNotBeSpecifiedAtTheSameTime() {
+        checkValidation(() -> testObj.length(1).pattern("a").value(),
+                "Pattern may not be specified simultaneously with any other constraint");
+    }
+
+    @Test
+    public void patternAndMinCharMayNotBeSpecifiedAtTheSameTime() {
+        checkValidation(() -> testObj.minChar('a').pattern("a").value(),
+                "Pattern may not be specified simultaneously with any other constraint");
+    }
+
+    @Test
+    public void patternAndMaxCharMayNotBeSpecifiedAtTheSameTime() {
+        checkValidation(() -> testObj.maxChar('a').pattern("a").value(),
+                "Pattern may not be specified simultaneously with any other constraint");
     }
 
     @Test

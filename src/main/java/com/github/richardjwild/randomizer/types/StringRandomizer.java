@@ -17,10 +17,11 @@ import static java.util.stream.Collectors.toList;
 /**
  * Creates randomized String values suitable for use as test data in automated tests.<p>
  * Usage: <code>String randomValue = Randomizer.forType(String.class).length(&lt;length&gt;).value();</code><p>
- * This class implements the builder patternElements to allow boundaries (constraints) to be specified on the generated random
- * value. These constraints are: {@link #length}, {@link #maxLength}, {@link #minLength}, {@link #maxChar} and
- * {@link #minChar}. If any other constraint method is called on this
- * class an <code>UnsupportedOperationException</code> will be thrown.<p>
+ * This class implements the builder patternElements to allow boundaries (constraints) to be specified on the generated
+ * random value. These constraints are: {@link #length}, {@link #maxLength}, {@link #minLength}, {@link #maxChar},
+ * {@link #minChar} and {@link #pattern}. If any other constraint method is called on this class an
+ * <code>UnsupportedOperationException</code> will be thrown.<p>
+ * If <code>pattern</code> is specified
  * Either one of <code>length</code> and <code>maxLength</code> must be specified, but it is illegal to specify both at
  * the same time. You may optionally specify a minimum length with <code>minLength</code> in conjunction with
  * <code>maxLength</code> but it is illegal to specify a minimum length in conjunction with <code>length</code>. If a
@@ -32,11 +33,8 @@ import static java.util.stream.Collectors.toList;
  */
 public class StringRandomizer extends Randomizer<String> {
 
-    private Integer length = null;
-    private Integer maxLength = null;
-    private Integer minLength = null;
-    private int maxChar = (int) Character.MAX_VALUE;
-    private int minChar = (int) ' ';
+    private Integer length = null, maxLength = null, minLength = null;
+    private Character maxChar = null, minChar = null;
     private String pattern;
 
     @Override
@@ -48,6 +46,8 @@ public class StringRandomizer extends Randomizer<String> {
     private void validateConstraints() {
         check(() -> pattern == null && length == null && maxLength == null,
                 LENGTH_MAXLENGTH_OR_PATTERN_MUST_BE_SPECIFIED);
+        check(() -> pattern != null && anyOtherConstraintSpecified(),
+                PATTERN_AND_ANY_OTHER_CONSTRAINT);
         check(() -> length != null && maxLength != null,
                 LENGTH_AND_MAXLENGTH_CANNOT_BE_SPECIFIED_SIMULTANEOUSLY);
         check(() -> length != null && minLength != null,
@@ -60,8 +60,12 @@ public class StringRandomizer extends Randomizer<String> {
                 LENGTH_MUST_BE_GREATER_THAN_ZERO);
         check(() -> minLength != null && maxLength != null && minLength > maxLength,
                 MINLENGTH_MUST_BE_LESS_THAN_MAXLENGTH);
-        check(() -> minChar > maxChar,
+        check(() -> minChar != null && maxChar != null && minChar > maxChar,
                 MINCHAR_MUST_BE_LESS_THAN_MAXCHAR);
+    }
+
+    private boolean anyOtherConstraintSpecified() {
+        return minLength != null || maxLength != null || length != null || minChar != null || maxChar != null;
     }
 
     private String randomString() {
@@ -81,8 +85,10 @@ public class StringRandomizer extends Randomizer<String> {
         return singletonList(new StringPatternElement(length, minLength, maxLength, allCharactersBetween(minChar, maxChar)));
     }
 
-    private List<Character> allCharactersBetween(int minChar, int maxChar) {
-        return Characters.from((char) minChar).limit(maxChar - minChar).collect(toList());
+    private List<Character> allCharactersBetween(Character minChar, Character maxChar) {
+        char min = ofNullable(minChar).orElse(' ');
+        char max = ofNullable(maxChar).orElse(Character.MAX_VALUE);
+        return Characters.from(min).limit(max - min).collect(toList());
     }
 
     private String buildStringElement(StringPatternElement element) {

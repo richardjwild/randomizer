@@ -25,6 +25,7 @@ public class Messages {
     public static final String LENGTH_MUST_BE_GREATER_THAN_ZERO = "randomizer.string.validation.lengthgreaterzero";
     public static final String MINLENGTH_MUST_BE_LESS_THAN_MAXLENGTH = "randomizer.string.validation.minlengthlessthanmaxlength";
     public static final String MINCHAR_MUST_BE_LESS_THAN_MAXCHAR = "randomizer.string.validation.mincharlessthanmaxchar";
+    public static final String PATTERN_AND_ANY_OTHER_CONSTRAINT = "randomizer.string.validation.patternandanyotherconstraint";
 
     public static String getMessage(String messageKey, String... argumentValues) {
         ResourceBundle messages = ResourceBundle.getBundle("messages", Locale.getDefault());
