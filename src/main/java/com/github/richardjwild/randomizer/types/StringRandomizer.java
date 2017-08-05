@@ -94,12 +94,12 @@ public class StringRandomizer extends Randomizer<String> {
     }
 
     private int elementLength(StringPatternElement pe) {
-        return ofNullable(pe.length()).orElseGet(() -> randomLength(pe));
+        return pe.length()
+                .orElseGet(() -> randomLength(pe));
     }
 
     private int randomLength(StringPatternElement pe) {
-        Integer minLength = ofNullable(pe.minLength()).orElse(1);
-        return randomInt(minLength, pe.maxLength());
+        return randomInt(pe.minLength().orElse(1), pe.maxLength());
     }
 
     private char randomCharacterFrom(List<Character> setOfCharacters) {

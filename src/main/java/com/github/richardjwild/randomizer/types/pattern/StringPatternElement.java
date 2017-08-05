@@ -1,7 +1,9 @@
 package com.github.richardjwild.randomizer.types.pattern;
 
 import java.util.List;
+import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 public class StringPatternElement {
@@ -16,12 +18,12 @@ public class StringPatternElement {
         this.permissibleCharacters = permissibleCharacters.stream().distinct().collect(toList());
     }
 
-    public Integer length() {
-        return length;
+    public Optional<Integer> length() {
+        return ofNullable(length);
     }
 
-    public Integer minLength() {
-        return minLength;
+    public Optional<Integer> minLength() {
+        return ofNullable(minLength);
     }
 
     public Integer maxLength() {
