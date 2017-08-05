@@ -4,6 +4,7 @@ import com.github.richardjwild.randomizer.types.pattern.StringPatternBuilder;
 import com.github.richardjwild.randomizer.types.pattern.StringPatternParser;
 
 import static com.github.richardjwild.randomizer.localization.Messages.UNEXPECTED_PATTERN_END_WANTED_CHARACTER;
+import static com.github.richardjwild.randomizer.types.pattern.StringPatternParser.exception;
 
 public class DefineLiteralPatternState extends ParserState {
 
@@ -16,7 +17,7 @@ public class DefineLiteralPatternState extends ParserState {
         ParserState nextState = this;
         switch (c) {
             case '\\':
-                char next = parser.lookAhead(1, UNEXPECTED_PATTERN_END_WANTED_CHARACTER);
+                char next = parser.lookAhead(1).orElseThrow(exception(UNEXPECTED_PATTERN_END_WANTED_CHARACTER));
                 builder.addSingleCharacterElement(next);
                 parser.skip(1);
                 break;

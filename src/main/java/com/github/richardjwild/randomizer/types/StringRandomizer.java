@@ -6,6 +6,7 @@ import com.github.richardjwild.randomizer.types.pattern.StringPatternElement;
 import com.github.richardjwild.randomizer.types.pattern.StringPatternParser;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.github.richardjwild.randomizer.localization.Messages.*;
 import static com.github.richardjwild.randomizer.validation.Validator.check;
@@ -64,9 +65,9 @@ public class StringRandomizer extends Randomizer<String> {
     }
 
     private String randomString() {
-        final StringBuilder sb = new StringBuilder();
-        patternElements().forEach(pe -> buildAndAppendStringElement(sb, pe));
-        return sb.toString();
+        return patternElements().stream()
+                .map(this::buildStringElement)
+                .collect(Collectors.joining());
     }
 
     private List<StringPatternElement> patternElements() {
@@ -84,20 +85,26 @@ public class StringRandomizer extends Randomizer<String> {
         return Characters.from((char) minChar).limit(maxChar - minChar).collect(toList());
     }
 
-    private void buildAndAppendStringElement(StringBuilder sb, StringPatternElement pe) {
-        int length = elementLength(pe);
+    private String buildStringElement(StringPatternElement element) {
+        StringBuilder builder = new StringBuilder();
+        int length = elementLength(element);
         for (int c = 0; c < length; c++)
-            sb.append(randomCharacterFrom(pe.permissibleCharacters()));
+            builder.append(randomCharacterFrom(element.permissibleCharacters()));
+        return builder.toString();
     }
 
     private int elementLength(StringPatternElement pe) {
-        return ofNullable(pe.length())
-                .orElseGet(() -> randomInt(ofNullable(pe.minLength()).orElse(1), pe.maxLength()));
+        return ofNullable(pe.length()).orElseGet(() -> randomLength(pe));
     }
 
-    private char randomCharacterFrom(List<Character> permissibleCharacters) {
-        int r = randomInt(1, permissibleCharacters.size() + 1);
-        return permissibleCharacters.get(r - 1);
+    private int randomLength(StringPatternElement pe) {
+        Integer minLength = ofNullable(pe.minLength()).orElse(1);
+        return randomInt(minLength, pe.maxLength());
+    }
+
+    private char randomCharacterFrom(List<Character> setOfCharacters) {
+        int r = randomInt(1, setOfCharacters.size() + 1);
+        return setOfCharacters.get(r - 1);
     }
 
     private int randomInt(int min, int max) {

@@ -34,8 +34,8 @@ public class DefineRangeLengthState extends ParserState {
     @Override
     public void patternEnded() {
         if (lengthBuilder.length() == 0)
-            throw new StringPatternParserException(getMessage(UNEXPECTED_PATTERN_END_WANTED_NUMBER));
-        throw new StringPatternParserException(getMessage(UNEXPECTED_PATTERN_END_WANTED_NUMBER_COMMA_CLOSECURLYBRACE));
+            throw new StringPatternParserException(UNEXPECTED_PATTERN_END_WANTED_NUMBER);
+        throw new StringPatternParserException(UNEXPECTED_PATTERN_END_WANTED_NUMBER_COMMA_CLOSECURLYBRACE);
     }
 
     private void setElementLength(String elementLengthDefinition) {
@@ -43,25 +43,25 @@ public class DefineRangeLengthState extends ParserState {
         switch (parts.length) {
             case 1:
                 if (elementLengthDefinition.endsWith(","))
-                    throw new StringPatternParserException(getMessage(MISSING_VALUE_IN_LENGTH_DEFINITION));
+                    throw new StringPatternParserException(MISSING_VALUE_IN_LENGTH_DEFINITION);
                 builder.addFixedLengthElement(tryParseInt(parts[0]), permittedCharacters);
                 break;
             case 2:
                 builder.addRandomLengthElement(tryParseInt(parts[0]), tryParseInt(parts[1]), permittedCharacters);
                 break;
             default:
-                throw new StringPatternParserException(getMessage(TOO_MANY_FIELDS_IN_LENGTH_DEFINITION,
-                        Integer.valueOf(parts.length).toString()));
+                throw new StringPatternParserException(TOO_MANY_FIELDS_IN_LENGTH_DEFINITION,
+                        Integer.valueOf(parts.length).toString());
         }
     }
 
     private int tryParseInt(String s) {
         try {
             if (s.isEmpty())
-                throw new StringPatternParserException(getMessage(MISSING_VALUE_IN_LENGTH_DEFINITION));
+                throw new StringPatternParserException(MISSING_VALUE_IN_LENGTH_DEFINITION);
             return parseInt(s);
         } catch (NumberFormatException e) {
-            throw new StringPatternParserException(getMessage(INVALID_NUMBER_IN_LENGTH_DEFINITION));
+            throw new StringPatternParserException(INVALID_NUMBER_IN_LENGTH_DEFINITION);
         }
     }
 }

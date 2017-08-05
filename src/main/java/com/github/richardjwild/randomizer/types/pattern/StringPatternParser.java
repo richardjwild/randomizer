@@ -4,10 +4,19 @@ import com.github.richardjwild.randomizer.types.pattern.parserstate.DefineLitera
 import com.github.richardjwild.randomizer.types.pattern.parserstate.ParserState;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
-import static com.github.richardjwild.randomizer.localization.Messages.getMessage;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 
 public class StringPatternParser {
+
+    private int requestedCharacterIndex;
+
+    public static Supplier<StringPatternParserException> exception(String messageKey) {
+        return () -> new StringPatternParserException(messageKey);
+    }
 
     private final char[] pattern;
     private int currentChar;
@@ -34,10 +43,11 @@ public class StringPatternParser {
         state.patternEnded();
     }
 
-    public char lookAhead(int chars, String errorMessageKey) {
-        if (currentChar + chars >= pattern.length)
-            throw new StringPatternParserException(getMessage(errorMessageKey));
-        return pattern[currentChar + chars];
+    public Optional<Character> lookAhead(int chars) {
+        requestedCharacterIndex = currentChar + chars;
+        if (pattern.length > requestedCharacterIndex)
+            return of(pattern[currentChar + chars]);
+        return empty();
     }
 
     public void skip(int chars) {
