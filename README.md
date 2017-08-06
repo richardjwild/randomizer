@@ -63,6 +63,17 @@ Of course. In this case the length must be specified, otherwise an IllegalArgume
 ```java
 Randomizer.forType(String.class).length(10).value();
 ```
+
+You can also specify a pattern for the generated string, using a small subset of the regular expression syntax:
+
+```java
+Randomizer.forType(String.class).pattern("[a-zA-Z]{5,10}[0-9]{2}@[a-z]{5,10}.com").value();
+```
+
+That will return between five and ten random letters (upper and lower case) then two random digits, followed by an @ 
+symbol, then between five and ten random lowercase letters, finishing with ".com" - in other words, a random string that
+resembles an email address.
+
 ### Dates would be useful.
 
 I thought so too, so you can also request random dates, and specify minimum and maximum values:
@@ -81,17 +92,17 @@ You can specify both min _and_ max to generate a random date within a range.
 All the primitives, Strings, Dates and BigDecimals so far. This table shows the constraint specifiers that are valid for
 each type:
 
-| Type       | min | max | length | maxLength | minLength | maxChar | minChar | scale |
-| ---------- | --- | --- | ------ | --------- | --------- | ------- | ------- | ----- |
-| Integer    | yes | yes | no     | no        | no        | no      | no      | no    |
-| Long       | yes | yes | no     | no        | no        | no      | no      | no    |
-| Float      | yes | yes | no     | no        | no        | no      | no      | no    |
-| Double     | yes | yes | no     | no        | no        | no      | no      | no    |
-| Character  | yes | yes | no     | no        | no        | no      | no      | no    |
-| Boolean    | no  | no  | no     | no        | no        | no      | no      | no    |
-| Date       | yes | yes | no     | no        | no        | no      | no      | no    |
-| String     | no  | no  | yes    | yes       | yes       | yes     | yes     | no    |
-| BigDecimal | yes | yes | no     | no        | no        | no      | no      | yes   |
+| Type       | min | max | length | maxLength | minLength | maxChar | minChar | scale | pattern |
+| ---------- | --- | --- | ------ | --------- | --------- | ------- | ------- | ----- | ------- |
+| Integer    | yes | yes | no     | no        | no        | no      | no      | no    | no      |
+| Long       | yes | yes | no     | no        | no        | no      | no      | no    | no      |
+| Float      | yes | yes | no     | no        | no        | no      | no      | no    | no      |
+| Double     | yes | yes | no     | no        | no        | no      | no      | no    | no      |
+| Character  | yes | yes | no     | no        | no        | no      | no      | no    | no      |
+| Boolean    | no  | no  | no     | no        | no        | no      | no      | no    | no      |
+| Date       | yes | yes | no     | no        | no        | no      | no      | no    | no      |
+| String     | no  | no  | yes    | yes       | yes       | yes     | yes     | no    | yes     |
+| BigDecimal | yes | yes | no     | no        | no        | no      | no      | yes   | no      |
 
 ### I want it to support another type. How can I implement this?
 

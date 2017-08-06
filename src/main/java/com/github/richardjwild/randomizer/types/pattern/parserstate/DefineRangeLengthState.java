@@ -44,10 +44,10 @@ public class DefineRangeLengthState extends ParserState {
             case 1:
                 if (elementLengthDefinition.endsWith(","))
                     throw new StringPatternParserException(MISSING_VALUE_IN_LENGTH_DEFINITION);
-                builder.addFixedLengthElement(tryParseInt(parts[0]), permittedCharacters);
+                builder.addFixedLengthElement(readInt(parts[0]), permittedCharacters);
                 break;
             case 2:
-                builder.addRandomLengthElement(tryParseInt(parts[0]), tryParseInt(parts[1]), permittedCharacters);
+                builder.addRandomLengthElement(readInt(parts[0]), readInt(parts[1]), permittedCharacters);
                 break;
             default:
                 throw new StringPatternParserException(TOO_MANY_FIELDS_IN_LENGTH_DEFINITION,
@@ -55,10 +55,14 @@ public class DefineRangeLengthState extends ParserState {
         }
     }
 
+    private int readInt(String s) {
+        if (s.isEmpty())
+            throw new StringPatternParserException(MISSING_VALUE_IN_LENGTH_DEFINITION);
+        return tryParseInt(s);
+    }
+
     private int tryParseInt(String s) {
         try {
-            if (s.isEmpty())
-                throw new StringPatternParserException(MISSING_VALUE_IN_LENGTH_DEFINITION);
             return parseInt(s);
         } catch (NumberFormatException e) {
             throw new StringPatternParserException(INVALID_NUMBER_IN_LENGTH_DEFINITION);

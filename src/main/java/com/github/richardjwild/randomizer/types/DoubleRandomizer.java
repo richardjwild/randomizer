@@ -14,17 +14,33 @@ public class DoubleRandomizer extends Randomizer<Double> {
     private Double maxValue = Double.MAX_VALUE;
     private Double minValue = Double.MAX_VALUE * -1.0D;
 
+    /**
+     * Gets the generated random double value, within any specified constraints.
+     * @return The generated random double.
+     */
     @Override
     public Double value() {
         return (random.nextDouble() * (maxValue - minValue)) + minValue;
     }
 
+    /**
+     * Sets the maximum boundary for the generated random double. The maximum is inclusive, i.e. the generated value may
+     * be less than or equal to the maximum boundary.
+     * @param maxValue The maximum bound for the generated random value.
+     * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
+     */
     @Override
     public Randomizer<Double> max(Double maxValue) {
         this.maxValue = maxValue;
         return this;
     }
 
+    /**
+     * Sets the minimum boundary for the generated random double. The minimum is inclusive, i.e. the generated value may
+     * be greater than or equal to the minimum boundary.
+     * @param minValue The minimum bound for the generated random value.
+     * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
+     */
     @Override
     public Randomizer<Double> min(Double minValue) {
         this.minValue = minValue;

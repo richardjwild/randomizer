@@ -54,7 +54,8 @@ public class DefineCharacterRangeState extends ParserState {
     }
 
     private boolean nextCharacterDefinesRange() {
-        return '-' == parser.lookAhead(1).orElseThrow(exception(UNEXPECTED_PATTERN_END_WANTED_CHARACTER_DASH_CLOSESQUAREBRACE));
+        return '-' == parser.lookAhead(1)
+                .orElseThrow(exception(UNEXPECTED_PATTERN_END_WANTED_CHARACTER_DASH_CLOSESQUAREBRACE));
     }
 
     private void addRangeOfPermittedCharacters(char minChar) {

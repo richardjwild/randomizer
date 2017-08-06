@@ -12,8 +12,6 @@ import static java.util.Optional.of;
 
 public class StringPatternParser {
 
-    private int requestedCharacterIndex;
-
     public static Supplier<StringPatternParserException> exception(String messageKey) {
         return () -> new StringPatternParserException(messageKey);
     }
@@ -44,7 +42,7 @@ public class StringPatternParser {
     }
 
     public Optional<Character> lookAhead(int chars) {
-        requestedCharacterIndex = currentChar + chars;
+        int requestedCharacterIndex = currentChar + chars;
         if (pattern.length > requestedCharacterIndex)
             return of(pattern[currentChar + chars]);
         return empty();

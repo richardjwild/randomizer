@@ -38,6 +38,10 @@ public class StringRandomizer extends Randomizer<String> {
     private Character maxChar = null, minChar = null;
     private String pattern;
 
+    /**
+     * Gets the generated random string value, within any specified constraints.
+     * @return The generated random string.
+     */
     @Override
     public String value() {
         validateConstraints();
@@ -117,36 +121,84 @@ public class StringRandomizer extends Randomizer<String> {
         return random.nextInt(max - min) + min;
     }
 
+    /**
+     * Sets the required length for the generated string. This is mandatory unless {@link #maxLength} is specified
+     * instead. It is not allowed to specify both <code>length</code> and <code>maxLength</code> at the same time.
+     * @param length The required length for the generated random string.
+     * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
+     */
     @Override
     public StringRandomizer length(int length) {
         this.length = length;
         return this;
     }
 
+    /**
+     * Sets the maximum length for the generated string. This is mandatory unless <code>length</code> is specified. It
+     * is not permitted to specify both <code>maxLength</code> and <code>length</code> at the same time.
+     * @param maxLength The maximum length for the generated random value.
+     * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
+     */
     @Override
     public StringRandomizer maxLength(int maxLength) {
         this.maxLength = maxLength;
         return this;
     }
 
+    /**
+     * Sets the minimum length for the generated random value. It is not permitted to specify both minLength and
+     * <code>length</code> at the same time.
+     * @param minLength The maximum length for the generated random value.
+     * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
+     */
     @Override
     public StringRandomizer minLength(int minLength) {
         this.minLength = minLength;
         return this;
     }
 
+    /**
+     * Sets the minimum value for every character in the generated random value. The default is <code>'\u0020'</code>,
+     * i.e. a space character.
+     * @param minChar The minimum character value that will appear in the generated string.
+     * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
+     */
     @Override
     public StringRandomizer minChar(char minChar) {
         this.minChar = minChar;
         return this;
     }
 
+    /**
+     * Sets the maximum value for every character in the generated random value. The default is <code>'\uFFFF'</code>.
+     * @param maxChar The maximum character value that will appear in the generated string.
+     * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
+     */
     @Override
     public StringRandomizer maxChar(char maxChar) {
         this.maxChar = maxChar;
         return this;
     }
 
+    /**
+     * Defines the pattern that the generated random value will follow. The pattern syntax is a subset of the regular
+     * expression syntax. Example usages:<p>
+     * <code>[a-z]{1}</code> will produce a single random character from a to z.<p>
+     * <code>[a-z0-9]{2}</code> will produce two random characters from a to z or 0 to 9.<p>
+     * <code>[AEIOU]{5}</code> will produce five random uppercase vowels.<p>
+     * <code>[a-zA-Z]{1,10}</code> will produce between 1 and 10 random alphabetic characters. The length will be
+     * chosen randomly.<p>
+     * <code>abc</code> will produce the literal string "abc".<p>
+     * <code>\[\]</code> will produce the literal string "[]", i.e. backslash causes the next character to be treated as
+     * a literal character.
+     * <code>[\[\]]{10}</code> will produce a string of length 10 randomly constructed from [ and ] characters.<p>
+     * <code>[a\-c]{10}</code> will produce a string of length 10 randomly constructed from a, - and c characters.<p>
+     * <code>[a-zA-Z]{5,10}[0-9]{2}@[a-z]{5,10}.com</code> will produce a string consisting of 5-10 random alpha
+     * characters followed by 2 random digits, then an '@' symbol, then 5-10 random random lowercase letters, followed
+     * by the literal string ".com". In other words, a random string that resembles an email address.
+     * @param pattern The pattern for the randomized string to adhere to
+     * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
+     */
     @Override
     public StringRandomizer pattern(String pattern) {
         this.pattern = pattern;

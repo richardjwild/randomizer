@@ -14,17 +14,33 @@ public class IntegerRandomizer extends Randomizer<Integer> {
     private Integer maxValue = Integer.MAX_VALUE;
     private Integer minValue = 0;
 
+    /**
+     * Gets the generated random integer value, within any specified constraints.
+     * @return The generated random value.
+     */
     @Override
     public Integer value() {
         return random.nextInt(maxValue - minValue) + minValue;
     }
 
+    /**
+     * Sets the maximum boundary for the generated random integer. The maximum is inclusive, i.e. the generated value
+     * may be less than or equal to the maximum boundary.
+     * @param maxValue The maximum bound for the generated random value.
+     * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
+     */
     @Override
     public Randomizer<Integer> max(Integer maxValue) {
         this.maxValue = maxValue;
         return this;
     }
 
+    /**
+     * Sets the minimum boundary for the generated random integer. The minimum is inclusive, i.e. the generated value
+     * may be greater than or equal to the minimum boundary.
+     * @param minValue The minimum bound for the generated random value.
+     * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
+     */
     @Override
     public Randomizer<Integer> min(Integer minValue) {
         this.minValue = minValue;

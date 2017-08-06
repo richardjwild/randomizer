@@ -10,6 +10,10 @@ import com.github.richardjwild.randomizer.Randomizer;
  */
 public class BooleanRandomizer extends Randomizer<Boolean> {
 
+    /**
+     * Gets the generated random boolean value for the specified type.
+     * @return The generated random boolean value.
+     */
     @Override
     public Boolean value() {
         return (random.nextInt() & 1) == 1;

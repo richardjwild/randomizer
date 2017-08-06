@@ -16,6 +16,10 @@ public class DateRandomizer extends Randomizer<Date> {
     private long maximum = Long.MAX_VALUE;
     private long minimum = Long.MIN_VALUE;
 
+    /**
+     * Gets the generated random date value, within any specified constraints.
+     * @return The generated random date.
+     */
     @Override
     public Date value() {
         double max = (double) maximum;
@@ -26,15 +30,27 @@ public class DateRandomizer extends Randomizer<Date> {
         return randomDate;
     }
 
+    /**
+     * Sets the minimum boundary for the generated random date. The minimum is inclusive, i.e. the generated value may
+     * be greater than or equal to the minimum boundary.
+     * @param minValue The minimum bound for the generated random value.
+     * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
+     */
     @Override
-    public DateRandomizer min(Date minimum) {
-        this.minimum = minimum.getTime();
+    public DateRandomizer min(Date minValue) {
+        this.minimum = minValue.getTime();
         return this;
     }
 
+    /**
+     * Sets the maximum boundary for the generated random date. The maximum is inclusive, i.e. the generated value may
+     * be less than or equal to the maximum boundary.
+     * @param maxValue The maximum bound for the generated random value.
+     * @return A reference to the <code>Randomizer</code> instance so that method calls can be chained.
+     */
     @Override
-    public DateRandomizer max(Date maximum) {
-        this.maximum = maximum.getTime();
+    public DateRandomizer max(Date maxValue) {
+        this.maximum = maxValue.getTime();
         return this;
     }
 }
