@@ -1,0 +1,70 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+group = "com.github.richardjwild"
+archivesBaseName = "randomizer"
+version = "0.3.0"
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'Randomizer'
+                packaging 'jar'
+                artifactId 'randomizer'
+                description 'Library for creating randomized values for use in automated tests'
+                url 'https://github.com/richardjwild/randomizer'
+
+                scm {
+                    connection 'scm:git:git://github.com/richardjwild/randomizer.git'
+                    developerConnection 'scm:git:git://github.com/richardjwild/randomizer.git'
+                    url 'https://github.com/richardjwild/randomizer/tree/master'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'richardjwild'
+                        name 'Richard Wild'
+                        email 'richardwild76@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+}
