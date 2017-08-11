@@ -5,50 +5,48 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.fest.assertions.Assertions.assertThat;
 
 public class BigDecimalRandomizerTest {
 
     @Test
     public void randomBigDecimal() {
         BigDecimal value = Randomizer.forType(BigDecimal.class).value();
-        assertNotNull(value);
+        assertThat(value).isNotNull();
     }
 
     @Test
     public void randomBigDecimalBetweenOneAndTen() {
         BigDecimal value = Randomizer.forType(BigDecimal.class).min(BigDecimal.ONE).max(BigDecimal.TEN).value();
-        assertTrue(value.compareTo(bd(1)) >= 0);
-        assertTrue(value.compareTo(bd(10)) <= 0);
+        assertThat(value).isGreaterThanOrEqualTo(bd(1));
+        assertThat(value).isLessThanOrEqualTo(bd(10));
     }
 
     @Test
     public void randomNegativeBigDecimal() {
         BigDecimal value = Randomizer.forType(BigDecimal.class).max(new BigDecimal(-1)).value();
-        assertTrue(value.compareTo(bd(-1)) <= 0);
+        assertThat(value).isLessThanOrEqualTo(bd(-1));
     }
 
     @Test
     public void randomPositiveBigDecimalWithNoUpperBound() {
         BigDecimal value = Randomizer.forType(BigDecimal.class).min(BigDecimal.ONE).value();
-        assertTrue(value.compareTo(bd(1)) >= 0);
+        assertThat(value).isGreaterThanOrEqualTo(bd(1));
     }
 
     @Test
     public void randomNegativeBigDecimalBetweenBounds() {
         BigDecimal value = Randomizer.forType(BigDecimal.class).min(new BigDecimal(-10)).max(new BigDecimal(-1)).value();
-        assertTrue(value.compareTo(bd(-10)) >= 0);
-        assertTrue(value.compareTo(bd(-1)) <= 0);
+        assertThat(value).isGreaterThanOrEqualTo(bd(-10));
+        assertThat(value).isLessThanOrEqualTo(bd(-1));
     }
 
     @Test
     public void randomBigDecimalWithScale() {
         BigDecimal value = Randomizer.forType(BigDecimal.class).min(BigDecimal.ZERO).max(BigDecimal.ONE).scale(3).value();
-        assertTrue(value.compareTo(bd(0)) >= 0);
-        assertTrue(value.compareTo(bd(1)) <= 0);
-        assertEquals(3, value.scale());
+        assertThat(value).isGreaterThanOrEqualTo(bd(0));
+        assertThat(value).isLessThanOrEqualTo(bd(1));
+        assertThat(value.scale()).isEqualTo(3);
     }
 
     private BigDecimal bd(int value) {

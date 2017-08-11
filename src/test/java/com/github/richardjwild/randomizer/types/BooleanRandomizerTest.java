@@ -5,8 +5,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.fest.assertions.Assertions.assertThat;
 
 public class BooleanRandomizerTest {
 
@@ -15,9 +14,8 @@ public class BooleanRandomizerTest {
 
     @Test
     public void randomValue() {
-        Object actual = Randomizer.forType(Boolean.class).value();
-        assertNotNull(actual);
-        assertTrue(actual instanceof Boolean);
+        Boolean value = Randomizer.forType(Boolean.class).value();
+        assertThat(value).isNotNull();
     }
 
     @Test

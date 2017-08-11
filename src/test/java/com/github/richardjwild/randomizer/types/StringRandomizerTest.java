@@ -11,9 +11,8 @@ import org.junit.rules.ExpectedException;
 import java.util.Locale;
 import java.util.function.Supplier;
 
-import static junit.framework.TestCase.assertTrue;
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class StringRandomizerTest {
 
@@ -27,18 +26,19 @@ public class StringRandomizerTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
+    private void checkNotSupported(Supplier<String> testSupplier) {
+        thrown.expect(UnsupportedOperationException.class);
+        testSupplier.get();
+    }
+
     @Test
     public void maximumMethodNotSupportedForStringRandomizer() {
-        String maxValue = "this is not supported for a string";
-        thrown.expect(UnsupportedOperationException.class);
-        testObj.max(maxValue).value();
+        checkNotSupported(() -> testObj.max("this is not supported").value());
     }
 
     @Test
     public void minimumMethodNotSupportedForStringRandomizer() {
-        String minValue = "this is not supported for a string";
-        thrown.expect(UnsupportedOperationException.class);
-        testObj.min(minValue).value();
+        checkNotSupported(() -> testObj.min("this is not supported").value());
     }
 
     private void checkValidation(Supplier<String> testSupplier, String expectedErrorMessage) {
@@ -144,18 +144,23 @@ public class StringRandomizerTest {
     }
 
     @Test
+    public void getValueReturnsSomething() {
+        String value = testObj.length(1).value();
+        assertThat(value).isNotNull();
+    }
+
+    @Test
     public void getValueWithLengthSpecified() {
         int length = 100;
         String value = testObj.length(length).value();
-        assertNotNull(value);
-        assertEquals(length, value.length());
+        assertThat(value).hasSize(length);
     }
 
     @Test
     public void getValueWithMaxLengthSpecified() {
         int maxLength = 100;
         String value = testObj.maxLength(maxLength).value();
-        assertTrue(value.length() <= maxLength);
+        assertThat(value.length()).isLessThanOrEqualTo(maxLength);
     }
 
     @Test
@@ -163,8 +168,8 @@ public class StringRandomizerTest {
         int maxLength = 100;
         int minLength = 90;
         String value = testObj.minLength(minLength).maxLength(maxLength).value();
-        assertTrue(minLength <= value.length());
-        assertTrue(value.length() <= maxLength);
+        assertThat(value.length()).isGreaterThanOrEqualTo(minLength);
+        assertThat(value.length()).isLessThanOrEqualTo(maxLength);
     }
 
     @Test
@@ -173,81 +178,76 @@ public class StringRandomizerTest {
         char maxChar = 'z';
         String value = testObj.minChar(minChar).maxChar(maxChar).length(100).value();
         for (char c : value.toCharArray()) {
-            assertTrue(minChar <= c);
-            assertTrue(c <= maxChar);
+            assertThat(c).isGreaterThanOrEqualTo(minChar);
+            assertThat(c).isLessThanOrEqualTo(maxChar);
         }
     }
 
     @Test
     public void patternWithSingleLiteralCharacter() {
         String value = testObj.pattern("a").value();
-        assertEquals("a", value);
+        assertThat(value).isEqualTo("a");
     }
 
     @Test
     public void patternWithLiteralCharacterSequence() {
         String value = testObj.pattern("ab").value();
-        assertEquals("ab", value);
+        assertThat(value).isEqualTo("ab");
     }
 
     @Test
     public void patternWithSetOfPermittedCharacters() {
         String value = testObj.pattern("[abc]{1}").value();
-        assertEquals(1, value.length());
-        assertTrue('a' <= value.charAt(0));
-        assertTrue(value.charAt(0) <= 'c');
+        assertThat(value).hasSize(1);
+        assertThat("abc").contains(value);
     }
 
     @Test
     public void patternWithRangeOfPermittedCharacters() {
         String value = testObj.pattern("[a-c]{1}").value();
-        assertEquals(1, value.length());
-        assertTrue('a' <= value.charAt(0));
-        assertTrue(value.charAt(0) <= 'c');
+        assertThat(value).hasSize(1);
+        assertThat("abc").contains(value);
     }
 
     @Test
     public void patternWithRangeOfPermittedCharactersWrongWayRound() {
         String value = testObj.pattern("[c-a]{1}").value();
-        assertEquals(1, value.length());
-        assertTrue('a' <= value.charAt(0));
-        assertTrue(value.charAt(0) <= 'c');
+        assertThat(value).hasSize(1);
+        assertThat("abc").contains(value);
+    }
+
+    private void assertAllCharactersContainedIn(String containedIn, String value) {
+        char[] charArray = containedIn.toCharArray();
+        for (char c : value.toCharArray())
+            assertThat(charArray).contains(c);
     }
 
     @Test
     public void patternWithRangeWithLengthGreaterThanOne() {
         String value = testObj.pattern("[a-c]{3}").value();
         assertEquals(3, value.length());
-        for (char c : value.toCharArray()) {
-            assertTrue('a' <= c);
-            assertTrue(c <= 'c');
-        }
+        assertAllCharactersContainedIn("abc", value);
     }
 
     @Test
     public void overlappingCharacterRanges() {
-        testObj.pattern("[a-bb-c]{1}").value();
+        String value = testObj.pattern("[a-bb-c]{1}").value();
+        assertThat("abc").contains(value);
     }
 
     @Test
     public void patternWithRangeWithLengthMoreThanOneDigit() {
         String value = testObj.pattern("[a-c]{10}").value();
         assertEquals(10, value.length());
-        for (char c : value.toCharArray()) {
-            assertTrue('a' <= c);
-            assertTrue(c <= 'c');
-        }
+        assertAllCharactersContainedIn("abc", value);
     }
 
     @Test
     public void patternWithLengthRange() {
         String value = testObj.pattern("[a-c]{1,10}").value();
-        assertTrue(1 <= value.length());
-        assertTrue(value.length() <= 10);
-        for (char c : value.toCharArray()) {
-            assertTrue('a' <= c);
-            assertTrue(c <= 'c');
-        }
+        assertThat(value.length()).isGreaterThanOrEqualTo(1);
+        assertThat(value.length()).isLessThanOrEqualTo(10);
+        assertAllCharactersContainedIn("abc", value);
     }
 
     private void checkPatternParsing(String pattern, String expectedErrorMessage) {
@@ -270,7 +270,7 @@ public class StringRandomizerTest {
 
     @Test
     public void patternWithRangeUnexpectedlyTerminated3() {
-        checkPatternParsing("[a-b","Unexpected end of pattern input, was expecting: ']'");
+        checkPatternParsing("[a-b", "Unexpected end of pattern input, was expecting: ']'");
     }
 
     @Test
@@ -281,7 +281,7 @@ public class StringRandomizerTest {
 
     @Test
     public void patternWithRangeWithoutLengthSpecified1() {
-        checkPatternParsing("[a-c]","Unexpected end of pattern input, was expecting: '{'");
+        checkPatternParsing("[a-c]", "Unexpected end of pattern input, was expecting: '{'");
     }
 
     @Test
@@ -359,29 +359,27 @@ public class StringRandomizerTest {
     @Test
     public void patternWithEscapedCharacterInLiteralSequence() {
         String value = testObj.pattern("\\[").value();
-        assertEquals("[", value);
+        assertThat(value).isEqualTo("[");
     }
 
     @Test
     public void patternWithEscapedCharactersInSetOfPermittedCharacters() {
-        String result = testObj.pattern("[\\[\\]]{10}").value();
-        for (char c: result.toCharArray())
-            assertTrue(c == '[' || c == ']');
+        String value = testObj.pattern("[\\[\\]]{10}").value();
+        assertAllCharactersContainedIn("[]", value);
     }
 
     @Test
     public void patternWithEscapedCharacterInRangeDefinition1() {
         String value = testObj.pattern("[a\\-]{10}").value();
-        for (char c : value.toCharArray())
-            assertTrue(c == '-' || c == 'a');
+        assertAllCharactersContainedIn("-a", value);
     }
 
     @Test
     public void patternWithEscapedCharacterInRangeDefinition2() {
         String value = testObj.pattern("[a-\\]]{10}").value();
         for (char c : value.toCharArray()) {
-            assertTrue(']' <= c);
-            assertTrue(c <= 'a');
+            assertThat(c).isGreaterThanOrEqualTo(']');
+            assertThat(c).isLessThanOrEqualTo('a');
         }
     }
 
@@ -389,20 +387,20 @@ public class StringRandomizerTest {
     public void patternWithTwoEscapedCharactersInRangeDefinition() {
         String value = testObj.pattern("[\\a-\\z]{100}").value();
         for (char c : value.toCharArray()) {
-            assertTrue('a' <= c);
-            assertTrue(c <= 'z');
+            assertThat(c).isGreaterThanOrEqualTo('a');
+            assertThat(c).isLessThanOrEqualTo('z');
         }
     }
 
     @Ignore("Run this test to see the effect of various patterns")
     @Test
     public void variousPatterns() {
-        print(() -> testObj.pattern("[a-z]{1}").value(),"Single random character");
+        print(() -> testObj.pattern("[a-z]{1}").value(), "Single random character");
         print(() -> testObj.pattern("[a-z0-9]{2}").value(), "Two random alphanumeric characters");
         print(() -> testObj.pattern("[AEIOU]{50}").value(), "Fifty random uppercase vowels");
         print(() -> testObj.pattern("[a-zA-Z]{1,10}").value(), "Between one and ten random letters");
         print(() -> testObj.pattern("Hello world!").value(), "A literal string");
-        print(() -> testObj.pattern("\\[Hello world!\\]").value(),"Another literal string");
+        print(() -> testObj.pattern("\\[Hello world!\\]").value(), "Another literal string");
         print(() -> testObj.pattern("[\\[\\]\\-]{10}").value(), "Random special characters");
         print(() -> testObj.pattern("[a\\-c]{10}").value(), "Random string including special characters");
         print(() -> testObj.pattern("[a-zA-Z]{5,10}[0-9]{2}@[a-z]{5,10}.com").value(), "Random email address");

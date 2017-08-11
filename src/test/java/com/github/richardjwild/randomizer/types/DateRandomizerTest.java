@@ -7,8 +7,7 @@ import org.junit.rules.ExpectedException;
 
 import java.util.Date;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.fest.assertions.Assertions.assertThat;
 
 public class DateRandomizerTest {
 
@@ -20,21 +19,21 @@ public class DateRandomizerTest {
     @Test
     public void randomDate() {
         Date value = Randomizer.forType(Date.class).value();
-        assertNotNull(value);
+        assertThat(value).isNotNull();
     }
 
     @Test
     public void randomDateInTheFuture() {
         Date minimum = currentTimePlusOffset(ONE_DAY);
         Date value = Randomizer.forType(Date.class).min(minimum).value();
-        assertTrue(value.compareTo(minimum) >= 0);
+        assertThat(value.compareTo(minimum)).isGreaterThanOrEqualTo(0);
     }
 
     @Test
     public void randomDateInThePast() {
         Date maximum = currentTimePlusOffset(-ONE_DAY);
         Date value = Randomizer.forType(Date.class).max(maximum).value();
-        assertTrue(value.compareTo(maximum) <= 0);
+        assertThat(value.compareTo(maximum)).isLessThanOrEqualTo(0);
     }
 
     @Test
@@ -42,15 +41,14 @@ public class DateRandomizerTest {
         Date minimum = currentTimePlusOffset(-ONE_DAY);
         Date maximum = currentTimePlusOffset(ONE_DAY);
         Date value = Randomizer.forType(Date.class).min(minimum).max(maximum).value();
-        assertTrue(value.compareTo(minimum) >= 0);
-        assertTrue(value.compareTo(maximum) <= 0);
+        assertThat(value.compareTo(minimum)).isGreaterThanOrEqualTo(0);
+        assertThat(value.compareTo(maximum)).isLessThanOrEqualTo(0);
     }
 
     @Test
     public void lengthNotSupportedForDateRandomizer() {
-        int anyLength = 1;
         thrown.expect(UnsupportedOperationException.class);
-        Randomizer.forType(Date.class).length(anyLength);
+        Randomizer.forType(Date.class).length(1);
     }
 
     private Date currentTimePlusOffset(long offset) {

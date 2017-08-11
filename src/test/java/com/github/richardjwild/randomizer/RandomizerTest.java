@@ -1,7 +1,7 @@
 package com.github.richardjwild.randomizer;
 
-import com.github.richardjwild.randomizer.validation.NoRandomizerFoundException;
 import com.github.richardjwild.randomizer.types.*;
+import com.github.richardjwild.randomizer.validation.NoRandomizerFoundException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -10,9 +10,8 @@ import org.junit.rules.ExpectedException;
 import java.util.Date;
 import java.util.Locale;
 
-import static org.junit.Assert.assertEquals;
+import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
 
 public class RandomizerTest {
 
@@ -41,56 +40,56 @@ public class RandomizerTest {
     @Test
     public void getStringRandomizer() {
         Object actual = Randomizer.forType(String.class);
-        assertNotNull(actual);
-        assertSame(StringRandomizer.class, actual.getClass());
+        assertThat(actual).isNotNull();
+        assertThat(actual).isInstanceOf(StringRandomizer.class);
     }
 
     @Test
     public void getIntRandomizer() {
         Object actual = Randomizer.forType(Integer.class);
         assertNotNull(actual);
-        assertSame(IntegerRandomizer.class, actual.getClass());
+        assertThat(actual).isInstanceOf(IntegerRandomizer.class);
     }
 
     @Test
     public void getLongRandomizer() {
         Object actual = Randomizer.forType(Long.class);
         assertNotNull(actual);
-        assertSame(LongRandomizer.class, actual.getClass());
+        assertThat(actual).isInstanceOf(LongRandomizer.class);
     }
 
     @Test
     public void getFloatRandomizer() {
         Object actual = Randomizer.forType(Float.class);
         assertNotNull(actual);
-        assertSame(FloatRandomizer.class, actual.getClass());
+        assertThat(actual).isInstanceOf(FloatRandomizer.class);
     }
 
     @Test
     public void getDoubleRandomizer() {
         Object actual = Randomizer.forType(Double.class);
         assertNotNull(actual);
-        assertSame(DoubleRandomizer.class, actual.getClass());
+        assertThat(actual).isInstanceOf(DoubleRandomizer.class);
     }
 
     @Test
     public void getDateRandomizer() {
         Object actual = Randomizer.forType(Date.class);
         assertNotNull(actual);
-        assertSame(DateRandomizer.class, actual.getClass());
+        assertThat(actual).isInstanceOf(DateRandomizer.class);
     }
 
     @Test
     public void getCharacterRandomizer() {
         Object actual = Randomizer.forType(Character.class);
         assertNotNull(actual);
-        assertSame(CharacterRandomizer.class, actual.getClass());
+        assertThat(actual).isInstanceOf(CharacterRandomizer.class);
     }
 
     @Test
     public void getBooleanRandomizer() {
         Object actual = Randomizer.forType(Boolean.class);
         assertNotNull(actual);
-        assertSame(BooleanRandomizer.class, actual.getClass());
+        assertThat(actual).isInstanceOf(BooleanRandomizer.class);
     }
 }

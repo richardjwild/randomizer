@@ -5,8 +5,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.fest.assertions.Assertions.assertThat;
 
 public class FloatRandomizerTest {
 
@@ -16,21 +15,21 @@ public class FloatRandomizerTest {
     @Test
     public void randomValue() {
         Float actual = Randomizer.forType(Float.class).value();
-        assertNotNull(actual);
+        assertThat(actual).isNotNull();
     }
 
     @Test
     public void randomValueMaximumOneHundred() {
         float maxValue = 100.0f;
         float value = Randomizer.forType(Float.class).max(maxValue).value();
-        assertTrue(value <= maxValue);
+        assertThat(value).isLessThanOrEqualTo(maxValue);
     }
 
     @Test
     public void randomValueMinimumTwoBillion() {
         float minValue = 2000000000.0f;
         float value = Randomizer.forType(Float.class).min(minValue).value();
-        assertTrue(value >= minValue);
+        assertThat(value).isGreaterThanOrEqualTo(minValue);
     }
 
     @Test
@@ -38,8 +37,8 @@ public class FloatRandomizerTest {
         float minValue = 5.0f;
         float maxValue = 10.0f;
         float value = Randomizer.forType(Float.class).min(minValue).max(maxValue).value();
-        assertTrue(minValue <= value);
-        assertTrue(value <= maxValue);
+        assertThat(value).isGreaterThanOrEqualTo(minValue);
+        assertThat(value).isLessThanOrEqualTo(maxValue);
     }
 
     @Test
@@ -47,8 +46,8 @@ public class FloatRandomizerTest {
         float minValue = Float.MAX_VALUE * -1.0f;
         float maxValue = -1;
         float value = Randomizer.forType(Float.class).min(minValue).max(maxValue).value();
-        assertTrue(minValue <= value);
-        assertTrue(value <= maxValue);
+        assertThat(value).isGreaterThanOrEqualTo(minValue);
+        assertThat(value).isLessThanOrEqualTo(maxValue);
     }
 
     @Test
