@@ -98,7 +98,8 @@ public class StringRandomizer extends Randomizer<String> {
     }
 
     private List<StringPatternElement> createSinglePatternElement() {
-        return singletonList(new StringPatternElement(length, minLength, maxLength, allCharactersBetween(minChar, maxChar)));
+        return singletonList(new StringPatternElement(length, minLength, maxLength,
+                allCharactersBetween(minChar, maxChar)));
     }
 
     private List<Character> allCharactersBetween(Character minChar, Character maxChar) {
