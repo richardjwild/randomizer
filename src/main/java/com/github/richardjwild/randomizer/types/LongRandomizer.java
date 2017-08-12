@@ -1,6 +1,8 @@
 package com.github.richardjwild.randomizer.types;
 
 import com.github.richardjwild.randomizer.Randomizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Creates randomized Long values suitable for use as test data in automated tests.<p>
@@ -10,6 +12,8 @@ import com.github.richardjwild.randomizer.Randomizer;
  * class an <code>UnsupportedOperationException</code> will be thrown.
  */
 public class LongRandomizer extends Randomizer<Long> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LongRandomizer.class);
 
     private long maxValue = Long.MAX_VALUE;
     private Long minValue = Long.MIN_VALUE;
@@ -22,7 +26,9 @@ public class LongRandomizer extends Randomizer<Long> {
     public Long value() {
         double maximum = (double) maxValue;
         double minimum = (double) minValue;
-        return (long) (random.nextDouble() * (maximum - minimum) + minimum);
+        long value = (long) (random.nextDouble() * (maximum - minimum) + minimum);
+        LOGGER.info("Random Long: " + value);
+        return value;
     }
 
     /**

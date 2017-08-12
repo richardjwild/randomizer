@@ -1,6 +1,8 @@
 package com.github.richardjwild.randomizer.types;
 
 import com.github.richardjwild.randomizer.Randomizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Creates randomized Float values suitable for use as test data in automated tests.<p>
@@ -11,9 +13,10 @@ import com.github.richardjwild.randomizer.Randomizer;
  */
 public class FloatRandomizer extends Randomizer<Float> {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(FloatRandomizer.class);
+
     private Float maxValue = Float.MAX_VALUE;
     private Float minValue = Float.MAX_VALUE * -1.0f;
-
 
     /**
      * Gets the generated random float value, within any specified constraints.
@@ -21,7 +24,9 @@ public class FloatRandomizer extends Randomizer<Float> {
      */
     @Override
     public Float value() {
-        return (random.nextFloat() * (maxValue - minValue)) + minValue;
+        float value = (random.nextFloat() * (maxValue - minValue)) + minValue;
+        LOGGER.info("Random Float: " + value);
+        return value;
     }
 
     /**

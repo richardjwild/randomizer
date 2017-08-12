@@ -1,6 +1,8 @@
 package com.github.richardjwild.randomizer.types;
 
 import com.github.richardjwild.randomizer.Randomizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
@@ -12,6 +14,8 @@ import java.util.Date;
  * class an <code>UnsupportedOperationException</code> will be thrown.
  */
 public class DateRandomizer extends Randomizer<Date> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DateRandomizer.class);
 
     private long maximum = Long.MAX_VALUE;
     private long minimum = Long.MIN_VALUE;
@@ -25,9 +29,10 @@ public class DateRandomizer extends Randomizer<Date> {
         double max = (double) maximum;
         double min = (double) minimum;
         long randomTime = (long) (random.nextDouble() * (max - min) + min);
-        Date randomDate = new Date();
-        randomDate.setTime(randomTime);
-        return randomDate;
+        Date value = new Date();
+        value.setTime(randomTime);
+        LOGGER.info("Random Date: " + value);
+        return value;
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.github.richardjwild.randomizer.types;
 
 import com.github.richardjwild.randomizer.Randomizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Creates randomized Integer values suitable for use as test data in automated tests.<p>
@@ -11,6 +13,8 @@ import com.github.richardjwild.randomizer.Randomizer;
  */
 public class IntegerRandomizer extends Randomizer<Integer> {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(IntegerRandomizer.class);
+
     private Integer maxValue = Integer.MAX_VALUE;
     private Integer minValue = 0;
 
@@ -20,7 +24,9 @@ public class IntegerRandomizer extends Randomizer<Integer> {
      */
     @Override
     public Integer value() {
-        return random.nextInt(maxValue - minValue) + minValue;
+        int value = random.nextInt(maxValue - minValue) + minValue;
+        LOGGER.info("Random Integer: " + value);
+        return value;
     }
 
     /**

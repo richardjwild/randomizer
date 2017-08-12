@@ -1,6 +1,8 @@
 package com.github.richardjwild.randomizer.types;
 
 import com.github.richardjwild.randomizer.Randomizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Creates randomized Character values suitable for use as test data in automated tests.<p>
@@ -10,6 +12,8 @@ import com.github.richardjwild.randomizer.Randomizer;
  * class an <code>UnsupportedOperationException</code> will be thrown.
  */
 public class CharacterRandomizer extends Randomizer<Character> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CharacterRandomizer.class);
 
     private Character minValue = Character.MIN_VALUE;
     private Character maxValue = Character.MAX_VALUE;
@@ -22,7 +26,9 @@ public class CharacterRandomizer extends Randomizer<Character> {
     public Character value() {
         int maximum = (int) maxValue;
         int minimum = (int) minValue;
-        return (char) (random.nextInt(maximum - minimum) + minimum);
+        char value = (char) (random.nextInt(maximum - minimum) + minimum);
+        LOGGER.info("Random Character: " + value);
+        return value;
     }
 
     /**

@@ -4,6 +4,8 @@ import com.github.richardjwild.randomizer.Randomizer;
 import com.github.richardjwild.randomizer.streams.Characters;
 import com.github.richardjwild.randomizer.types.pattern.StringPatternElement;
 import com.github.richardjwild.randomizer.types.pattern.StringPatternParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +38,8 @@ import static java.util.stream.Collectors.toList;
  */
 public class StringRandomizer extends Randomizer<String> {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(StringRandomizer.class);
+
     private Integer length = null, maxLength = null, minLength = null;
     private Character maxChar = null, minChar = null;
     private String pattern;
@@ -50,7 +54,9 @@ public class StringRandomizer extends Randomizer<String> {
     @Override
     public String value() {
         validateConstraints();
-        return randomString();
+        String value = randomString();
+        LOGGER.info("Random String: " + value);
+        return value;
     }
 
     private void validateConstraints() {

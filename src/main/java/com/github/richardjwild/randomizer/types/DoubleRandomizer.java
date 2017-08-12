@@ -1,6 +1,8 @@
 package com.github.richardjwild.randomizer.types;
 
 import com.github.richardjwild.randomizer.Randomizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Creates randomized Double values suitable for use as test data in automated tests.<p>
@@ -11,6 +13,8 @@ import com.github.richardjwild.randomizer.Randomizer;
  */
 public class DoubleRandomizer extends Randomizer<Double> {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DoubleRandomizer.class);
+
     private Double maxValue = Double.MAX_VALUE;
     private Double minValue = Double.MAX_VALUE * -1.0D;
 
@@ -20,7 +24,9 @@ public class DoubleRandomizer extends Randomizer<Double> {
      */
     @Override
     public Double value() {
-        return (random.nextDouble() * (maxValue - minValue)) + minValue;
+        double value = (random.nextDouble() * (maxValue - minValue)) + minValue;
+        LOGGER.info("Random Double: " + value);
+        return value;
     }
 
     /**

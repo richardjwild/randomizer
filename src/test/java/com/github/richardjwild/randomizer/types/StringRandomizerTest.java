@@ -395,18 +395,14 @@ public class StringRandomizerTest {
     @Ignore("Run this test to see the effect of various patterns")
     @Test
     public void variousPatterns() {
-        print(() -> testObj.pattern("[a-z]{1}").value(), "Single random character");
-        print(() -> testObj.pattern("[a-z0-9]{2}").value(), "Two random alphanumeric characters");
-        print(() -> testObj.pattern("[AEIOU]{50}").value(), "Fifty random uppercase vowels");
-        print(() -> testObj.pattern("[a-zA-Z]{1,10}").value(), "Between one and ten random letters");
-        print(() -> testObj.pattern("Hello world!").value(), "A literal string");
-        print(() -> testObj.pattern("\\[Hello world!\\]").value(), "Another literal string");
-        print(() -> testObj.pattern("[\\[\\]\\-]{10}").value(), "Random special characters");
-        print(() -> testObj.pattern("[a\\-c]{10}").value(), "Random string including special characters");
-        print(() -> testObj.pattern("[a-zA-Z]{5,10}[0-9]{2}@[a-z]{5,10}.com").value(), "Random email address");
-    }
-
-    private void print(Supplier<String> randomizer, String message) {
-        System.out.println(message + ": " + randomizer.get());
+        testObj.pattern("[a-z]{1}").value();
+        testObj.pattern("[a-z0-9]{2}").value();
+        testObj.pattern("[AEIOU]{50}").value();
+        testObj.pattern("[a-zA-Z]{1,10}").value();
+        testObj.pattern("Hello world!").value();
+        testObj.pattern("\\[Hello world!\\]").value();
+        testObj.pattern("[\\[\\]\\-]{10}").value();
+        testObj.pattern("[a\\-c]{10}").value();
+        testObj.pattern("[a-zA-Z]{5,10}[0-9]{2}@[a-z]{5,10}.com").value();
     }
 }

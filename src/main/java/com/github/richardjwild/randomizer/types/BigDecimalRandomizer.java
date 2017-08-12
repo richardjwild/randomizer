@@ -1,6 +1,8 @@
 package com.github.richardjwild.randomizer.types;
 
 import com.github.richardjwild.randomizer.Randomizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -14,6 +16,8 @@ import java.math.RoundingMode;
  */
 public class BigDecimalRandomizer extends Randomizer<BigDecimal> {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(BigDecimalRandomizer.class);
+
     private BigDecimal maximum = new BigDecimal(Long.MAX_VALUE);
     private BigDecimal minimum = new BigDecimal(Long.MIN_VALUE);
     private int scale = 0;
@@ -26,7 +30,9 @@ public class BigDecimalRandomizer extends Randomizer<BigDecimal> {
     public BigDecimal value() {
         Double range = maximum.subtract(minimum).doubleValue();
         Double randomDouble = random.nextDouble() * range;
-        return BigDecimal.valueOf(randomDouble).add(minimum).setScale(scale, RoundingMode.HALF_UP);
+        BigDecimal value = BigDecimal.valueOf(randomDouble).add(minimum).setScale(scale, RoundingMode.HALF_UP);
+        LOGGER.info("Random BigDecimal: " + value);
+        return value;
     }
 
     /**
