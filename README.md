@@ -12,7 +12,7 @@ To add it to your project, these are the Maven details:
 <dependency>
     <groupId>com.github.richardjwild</groupId>
     <artifactId>randomizer</artifactId>
-    <version>0.3.0</version>
+    <version>0.3.1</version>
 </dependency>
 ``` 
 
@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    testCompile 'com.github.richardjwild:randomizer:0.3.0'
+    testCompile 'com.github.richardjwild:randomizer:0.3.1'
 }
 ```
 
