@@ -27,11 +27,10 @@ public class DefineCharacterRangeState extends ParserState {
                 treatNextCharacterAsLiteral();
                 return this;
             case ']':
-                if (nextCharacterDefinesLength()) {
-                    parser.skip(1);
-                    return new DefineRangeLengthState(parser, builder, permittedCharacters);
-                } else
+                if (!nextCharacterDefinesLength())
                     throw new StringPatternParserException(UNEXPECTED_CHARACTER_WANTED_OPENCURLYBRACE);
+                parser.skip(1);
+                return new DefineRangeLengthState(parser, builder, permittedCharacters);
             default:
                 addPermittedCharacterOrDefineRange(c);
                 return this;
