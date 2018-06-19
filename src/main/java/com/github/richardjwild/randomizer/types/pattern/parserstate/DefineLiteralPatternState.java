@@ -14,20 +14,18 @@ public class DefineLiteralPatternState extends ParserState {
 
     @Override
     public ParserState handleCharacter(char c) {
-        ParserState nextState = this;
         switch (c) {
             case '\\':
                 char next = parser.lookAhead(1).orElseThrow(exception(UNEXPECTED_PATTERN_END_WANTED_CHARACTER));
                 builder.addSingleCharacterElement(next);
                 parser.skip(1);
-                break;
+                return this;
             case '[':
-                nextState = new DefineCharacterRangeState(parser, builder);
-                break;
+                return new DefineCharacterRangeState(parser, builder);
             default:
                 builder.addSingleCharacterElement(c);
+                return this;
         }
-        return nextState;
     }
 
     @Override
