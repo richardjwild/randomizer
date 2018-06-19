@@ -124,9 +124,9 @@ public class StringRandomizer extends Randomizer<String> {
         return randomInt(pe.minLength().orElse(1), pe.maxLength());
     }
 
-    private char randomCharacterFrom(List<Character> setOfCharacters) {
-        int r = randomInt(1, setOfCharacters.size() + 1);
-        return setOfCharacters.get(r - 1);
+    private char randomCharacterFrom(List<Character> permissibleCharacters) {
+        int index = randomInt(0, permissibleCharacters.size());
+        return permissibleCharacters.get(index);
     }
 
     private int randomInt(int min, int max) {
