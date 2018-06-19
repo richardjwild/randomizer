@@ -22,22 +22,20 @@ public class DefineCharacterRangeState extends ParserState {
 
     @Override
     public ParserState handleCharacter(char c) {
-        ParserState nextState = this;
         switch (c) {
             case '\\':
                 treatNextCharacterAsLiteral();
-                break;
+                return this;
             case ']':
-                if (nextCharacterDefinesLength())
+                if (nextCharacterDefinesLength()) {
                     parser.skip(1);
-                else
+                    return new DefineRangeLengthState(parser, builder, permittedCharacters);
+                } else
                     throw new StringPatternParserException(UNEXPECTED_CHARACTER_WANTED_OPENCURLYBRACE);
-                nextState = new DefineRangeLengthState(parser, builder, permittedCharacters);
-                break;
             default:
                 addPermittedCharacterOrDefineRange(c);
+                return this;
         }
-        return nextState;
     }
 
     private void treatNextCharacterAsLiteral() {
@@ -76,7 +74,8 @@ public class DefineCharacterRangeState extends ParserState {
     private Stream<Character> allCharsBetween(char minChar, char maxChar) {
         if (minChar <= maxChar)
             return from(minChar).limit(maxChar - minChar);
-        return from(maxChar).limit(minChar - maxChar);
+        else
+            return from(maxChar).limit(minChar - maxChar);
     }
 
     private boolean nextCharacterDefinesLength() {
