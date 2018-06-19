@@ -9,7 +9,7 @@ import java.util.Date;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class DateRandomizerTest {
+public class DateRandomizerShould {
 
     private static final long ONE_DAY = 1000 * 60 * 60 * 24;
 
@@ -17,27 +17,27 @@ public class DateRandomizerTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void randomDate() {
+    public void return_a_date() {
         Date value = Randomizer.forType(Date.class).value();
         assertThat(value).isNotNull();
     }
 
     @Test
-    public void randomDateInTheFuture() {
+    public void return_a_date_in_the_future() {
         Date minimum = currentTimePlusOffset(ONE_DAY);
         Date value = Randomizer.forType(Date.class).min(minimum).value();
         assertThat(value.compareTo(minimum)).isGreaterThanOrEqualTo(0);
     }
 
     @Test
-    public void randomDateInThePast() {
+    public void return_a_date_in_the_past() {
         Date maximum = currentTimePlusOffset(-ONE_DAY);
         Date value = Randomizer.forType(Date.class).max(maximum).value();
         assertThat(value.compareTo(maximum)).isLessThanOrEqualTo(0);
     }
 
     @Test
-    public void randomDateBetweenTwoBounds() {
+    public void return_a_date_between_min_and_max() {
         Date minimum = currentTimePlusOffset(-ONE_DAY);
         Date maximum = currentTimePlusOffset(ONE_DAY);
         Date value = Randomizer.forType(Date.class).min(minimum).max(maximum).value();
@@ -46,7 +46,7 @@ public class DateRandomizerTest {
     }
 
     @Test
-    public void lengthNotSupportedForDateRandomizer() {
+    public void not_support_length() {
         thrown.expect(UnsupportedOperationException.class);
         Randomizer.forType(Date.class).length(1);
     }
