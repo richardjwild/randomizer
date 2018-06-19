@@ -1,6 +1,7 @@
 .gradle
 gradle
 .idea
+*.iml
 randomizer.ipr
 randomizer.iws
 randomizer.iml
