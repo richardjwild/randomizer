@@ -13,7 +13,7 @@ public abstract class ParserState {
         this.builder = builder;
     }
 
-    public abstract ParserState handle(char c);
+    public abstract ParserState handleCharacter(char c);
 
     public abstract void patternEnded();
 }

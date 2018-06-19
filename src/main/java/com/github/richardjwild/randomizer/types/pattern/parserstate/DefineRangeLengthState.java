@@ -20,7 +20,7 @@ public class DefineRangeLengthState extends ParserState {
     }
 
     @Override
-    public ParserState handle(char c) {
+    public ParserState handleCharacter(char c) {
         ParserState nextState = this;
         if (c == '}') {
             setElementLength(lengthBuilder.toString());

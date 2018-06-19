@@ -24,7 +24,6 @@ public class StringPatternParser {
     }
 
     public List<StringPatternElement> parseAndCreatePatternElements() {
-        currentChar = 0;
         StringPatternBuilder builder = new StringPatternBuilder();
         ParserState state = initialState(builder);
         parseStringPattern(state);
@@ -37,7 +36,7 @@ public class StringPatternParser {
 
     private void parseStringPattern(ParserState state) {
         for (currentChar = 0; currentChar < pattern.length; currentChar++)
-            state = state.handle(pattern[currentChar]);
+            state = state.handleCharacter(pattern[currentChar]);
         state.patternEnded();
     }
 

@@ -21,7 +21,7 @@ public class DefineCharacterRangeState extends ParserState {
     }
 
     @Override
-    public ParserState handle(char c) {
+    public ParserState handleCharacter(char c) {
         ParserState nextState = this;
         switch (c) {
             case '\\':
