@@ -37,9 +37,9 @@ public class DefineRangeLengthState extends ParserState {
 
     @Override
     public void patternEnded() {
-        if (lengthDefinition.length() == 0)
-            throw new StringPatternParserException(UNEXPECTED_PATTERN_END_WANTED_NUMBER);
-        throw new StringPatternParserException(UNEXPECTED_PATTERN_END_WANTED_NUMBER_COMMA_CLOSECURLYBRACE);
+        throw new StringPatternParserException((lengthDefinition.length() == 0)
+                ? UNEXPECTED_PATTERN_END_WANTED_NUMBER
+                : UNEXPECTED_PATTERN_END_WANTED_NUMBER_COMMA_CLOSECURLYBRACE);
     }
 
     private void addStringPatternElement(String lengthDefinition) {
