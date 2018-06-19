@@ -21,14 +21,13 @@ public class DefineRangeLengthState extends ParserState {
 
     @Override
     public ParserState handleCharacter(char c) {
-        ParserState nextState = this;
         if (c == '}') {
             setElementLength(lengthBuilder.toString());
-            nextState = new DefineLiteralPatternState(parser, builder);
+            return new DefineLiteralPatternState(parser, builder);
         } else {
             lengthBuilder.append(c);
+            return this;
         }
-        return nextState;
     }
 
     @Override
